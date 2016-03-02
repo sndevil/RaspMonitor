@@ -2,9 +2,14 @@
 
 int counter = 0;
 
-void on_window_main_destroy()
+void on_Mainwindow_destroy()
 {
     gtk_main_quit();
+}
+
+void on_quit_clicked()
+{
+  gtk_main_quit();
 }
 
 void str(char* out, int i)
@@ -20,11 +25,16 @@ void strdbl(char* out, double i)
 void tick(GtkLabel** labels)
 {
   g_timeout_add_seconds(1,tick,labels);
-  changeLabel(labels[0],counter);
-  changeLabeldbl(labels[1],0.261*counter+20);
-  changeLabel(labels[2],counter+523);
-  changeLabel(labels[3],1000-counter);
-  changeLabel(labels[4],500 - counter);
+
+  changeLabeldbl(labels[0],(rand() % 210)/10);
+  changeLabeldbl(labels[1],(rand() % 50000));
+  changeLabeldbl(labels[4],(rand()%300)/10);
+  changeLabel(labels[6],(rand()%50));
+  changeLabel(labels[7],(rand()%40));
+  changeLabel(labels[8],(rand()%40));
+  changeLabel(labels[9],(rand()%40));
+  changeLabel(labels[10],(rand()%40));
+
   counter++;
   if (counter > 1000)
     counter = 0;

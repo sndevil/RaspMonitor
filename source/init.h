@@ -1,1 +1,1 @@
-GtkLabel** initgui(GtkWidget *window);
+GtkLabel** initgui(GtkWidget *window,GtkNotebook **notebook);
