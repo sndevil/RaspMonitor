@@ -1,0 +1,1 @@
+GtkLabel** initgui(GtkWidget *window);
