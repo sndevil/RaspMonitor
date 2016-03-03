@@ -1,10 +1,13 @@
 #include <gtk/gtk.h>
+#include "functions.h"
+
 GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
 {
 
   GtkBuilder  *builder;
   GtkLabel **labels;
   GtkWidget *page;
+  //GtkWidget *button;
     builder = gtk_builder_new();
     labels = malloc(30 * sizeof(GtkLabel*));
     gtk_builder_add_from_file (builder, "visual/Satmonitor.glade", NULL);
@@ -20,7 +23,14 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     labels[8] = GTK_LABEL(gtk_builder_get_object(builder, "controltempval"));
     labels[9] = GTK_LABEL(gtk_builder_get_object(builder, "racktempval"));
     labels[10] = GTK_LABEL(gtk_builder_get_object(builder, "patempval"));
-
+    labels[11] = GTK_LABEL(gtk_builder_get_object(builder, "Powerval"));
+    labels[12] = GTK_LABEL(gtk_builder_get_object(builder, "Sendpowerval"));
+    labels[13] = GTK_LABEL(gtk_builder_get_object(builder, "Sendrateval"));
+    labels[14] = GTK_LABEL(gtk_builder_get_object(builder, "Receiverateval"));
+    labels[15] = GTK_LABEL(gtk_builder_get_object(builder, "Sendfreqval"));
+    labels[16] = GTK_LABEL(gtk_builder_get_object(builder, "Receivefreqval"));
+    
+    //button = GTK_BUTTON(gtk_builder_get_object(builder, "Onoffsetbtn"));
     //page = GTK_WIDGET(gtk_builder_get_object(builder, "notebookpage"));
     //*notebook = GTK_NOTEBOOK(gtk_builder_get_object(builder, "notebook"));
     //gtk_notebook_append_page(*notebook,page,gtk_label_new("tab2"));
@@ -28,7 +38,8 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     
 
     gtk_builder_connect_signals(builder, NULL);
-
+    //g_signal_connect (button, "clicked",
+    //		      G_CALLBACK(on_Onoffsetbtn_clicked),(gpointer)"hello");
     g_object_unref(builder);
     gtk_widget_show_all(window);
     return labels;

@@ -1,5 +1,12 @@
 void on_Mainwindow_destroy();
 void on_quit_clicked();
+void on_Powertoggle_toggled();
+void on_Onoffsetbtn_clicked();
+void on_Sendpowersetbtn_clicked(GtkButton *button,gpointer   user_data);
+void on_Sendratesetbtn_clicked();
+void on_Receiveratesetbtn_clicked();
+void on_Sendfreqsetbtn_clicked();
+void on_Receivefreqsetbtn_clicked();
 void tick(gpointer data);
 void str(char* out,int i);
 void strdbl(char* out,double i);

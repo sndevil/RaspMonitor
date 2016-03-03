@@ -702,6 +702,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
+                            <signal name="toggled" handler="on_Powertoggle_toggled" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">2</property>
@@ -718,6 +719,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_Onoffsetbtn_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -734,6 +736,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_Sendpowersetbtn_clicked" object="Sendpowerscale" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -750,6 +753,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_Sendratesetbtn_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -766,6 +770,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_Receiveratesetbtn_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -782,6 +787,7 @@
                             <property name="can_focus">True</property>
                             <property name="receives_default">True</property>
                             <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_Sendfreqsetbtn_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
@@ -799,6 +805,7 @@
                             <property name="receives_default">True</property>
                             <property name="hexpand">True</property>
                             <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_Receivefreqsetbtn_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="left_attach">3</property>
