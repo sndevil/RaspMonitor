@@ -29,6 +29,16 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     labels[14] = GTK_LABEL(gtk_builder_get_object(builder, "Receiverateval"));
     labels[15] = GTK_LABEL(gtk_builder_get_object(builder, "Sendfreqval"));
     labels[16] = GTK_LABEL(gtk_builder_get_object(builder, "Receivefreqval"));
+    labels[17] = GTK_LABEL(gtk_builder_get_object(builder, "humidityval"));
+    labels[18] = GTK_LABEL(gtk_builder_get_object(builder, "voltageval"));
+    labels[19] = GTK_LABEL(gtk_builder_get_object(builder, "currentval"));
+    labels[20] = GTK_LABEL(gtk_builder_get_object(builder, "systemstatval"));
+    labels[21] = GTK_LABEL(gtk_builder_get_object(builder, "carriererrorval"));
+    labels[22] = GTK_LABEL(gtk_builder_get_object(builder, "externalfreqlockstatval"));
+    labels[23] = GTK_LABEL(gtk_builder_get_object(builder, "viterbistatval"));
+    labels[24] = GTK_LABEL(gtk_builder_get_object(builder, "timinglooperrorval"));
+    labels[25] = GTK_LABEL(gtk_builder_get_object(builder, "errorsignalstatval"));
+    
     
     //button = GTK_BUTTON(gtk_builder_get_object(builder, "Onoffsetbtn"));
     //page = GTK_WIDGET(gtk_builder_get_object(builder, "notebookpage"));

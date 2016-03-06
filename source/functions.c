@@ -15,40 +15,54 @@ void on_quit_clicked()
 
 void on_Powertoggle_toggled()
 {
-  printf("This is running\n");
   powertoggle = (powertoggle == true) ? false : true;
   printf("Powertoggle toggled: %d\n",powertoggle);
 }
 
 void on_Onoffsetbtn_clicked()
 {
-  printf("OnoffSet\n");
+  printf("toggled: %d\n",powertoggle);
+
 }
 
 void on_Sendpowersetbtn_clicked(GtkButton *button, gpointer user_data)
 {
-  GtkScale* scale = GTK_SCALE(user_data);
-  printf("Sendpowerset\n");
+  double val;
+  GtkAdjustment* scale = GTK_ADJUSTMENT(user_data);
+  val = gtk_adjustment_get_value(scale);
+  printf("value: %f\n",val);
 }
 
-void on_Sendratesetbtn_clicked()
+void on_Sendratesetbtn_clicked(GtkButton *button, gpointer user_data)
 {
-  printf("Sendrateset\n");
+  double val;
+  GtkAdjustment* scale = GTK_ADJUSTMENT(user_data);
+  val = gtk_adjustment_get_value(scale);
+  printf("value: %f\n",val);
 }
 
-void on_Receiveratesetbtn_clicked()
+void on_Receiveratesetbtn_clicked(GtkButton *button, gpointer user_data)
 {
-  printf("Receiverrate\n");
+  double val;
+  GtkAdjustment* scale = GTK_ADJUSTMENT(user_data);
+  val = gtk_adjustment_get_value(scale);
+  printf("value: %f\n",val);
 }
 
-void on_Sendfreqsetbtn_clicked()
+void on_Sendfreqsetbtn_clicked(GtkButton *button, gpointer user_data)
 {
-  printf("Sendfreqset\n");
+  double val;
+  GtkAdjustment* scale = GTK_ADJUSTMENT(user_data);
+  val = gtk_adjustment_get_value(scale);
+  printf("value: %f\n",val);
 }
 
-void on_Receivefreqsetbtn_clicked()
+void on_Receivefreqsetbtn_clicked(GtkButton *button, gpointer user_data)
 {
-  printf("Receivefreqset\n");
+  double val;
+  GtkAdjustment* scale = GTK_ADJUSTMENT(user_data);
+  val = gtk_adjustment_get_value(scale);
+  printf("value: %f\n",val);
 }
 
 void str(char* out, int i)
@@ -73,6 +87,19 @@ void tick(GtkLabel** labels)
   changeLabel(labels[8],(int)(rand()%40));
   changeLabel(labels[9],(int)(rand()%40));
   changeLabel(labels[10],(int)(rand()%40));
+  changeLabel(labels[12],(int)(rand()%40));
+  changeLabel(labels[13],(int)(rand()%40));
+  changeLabel(labels[14],(int)(rand()%40));
+  changeLabel(labels[15],(int)(rand()%40));
+  changeLabel(labels[16],(int)(rand()%40));
+  changeLabel(labels[17],(int)(rand()%40));
+  changeLabeldbl(labels[18],(rand()%24));
+  changeLabeldbl(labels[19],(rand()%4));
+  changeLabeldbl(labels[21],rand());
+  changeLabeldbl(labels[23],rand());
+  changeLabeldbl(labels[24],rand());
+  changeLabeldbl(labels[25],rand());
+
 }
 
 
