@@ -1,0 +1,15 @@
+
+Description:
+
+Monitor Program for Board, developed for Raspberry pi.
+
+Running:
+
+Run these commands in shell:
+	cd route/to/main/directory
+	make
+	./bin/Finder.out
+
+(make from the main directory, and run from there too -Dont cd into bin folder)
+
+	
