@@ -7,7 +7,7 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
   GtkBuilder  *builder;
   GtkLabel **labels;
   GtkWidget *page;
-  //GtkWidget *button;
+
     builder = gtk_builder_new();
     labels = malloc(30 * sizeof(GtkLabel*));
     gtk_builder_add_from_file (builder, "visual/Satmonitor.glade", NULL);
@@ -38,18 +38,11 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     labels[23] = GTK_LABEL(gtk_builder_get_object(builder, "viterbistatval"));
     labels[24] = GTK_LABEL(gtk_builder_get_object(builder, "timinglooperrorval"));
     labels[25] = GTK_LABEL(gtk_builder_get_object(builder, "errorsignalstatval"));
-    
-    
-    //button = GTK_BUTTON(gtk_builder_get_object(builder, "Onoffsetbtn"));
-    //page = GTK_WIDGET(gtk_builder_get_object(builder, "notebookpage"));
-    //*notebook = GTK_NOTEBOOK(gtk_builder_get_object(builder, "notebook"));
-    //gtk_notebook_append_page(*notebook,page,gtk_label_new("tab2"));
-//printf("in init, notebook is: %d\n", *notebook);
-    
+    labels[26] = GTK_LABEL(gtk_builder_get_object(builder, "staticons"));
+    labels[27] = GTK_WIDGET(gtk_builder_get_object(builder, "Statusbar"));
+    gtk_statusbar_push (GTK_STATUSBAR(labels[27]),1,"");
 
     gtk_builder_connect_signals(builder, NULL);
-    //g_signal_connect (button, "clicked",
-    //		      G_CALLBACK(on_Onoffsetbtn_clicked),(gpointer)"hello");
     g_object_unref(builder);
     gtk_widget_show_all(window);
     return labels;
