@@ -40,6 +40,7 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     labels[25] = GTK_LABEL(gtk_builder_get_object(builder, "errorsignalstatval"));
     labels[26] = GTK_LABEL(gtk_builder_get_object(builder, "staticons"));
     labels[27] = GTK_WIDGET(gtk_builder_get_object(builder, "Statusbar"));
+    labels[28] = GTK_WIDGET(gtk_builder_get_object(builder, "loading"));
     gtk_statusbar_push (GTK_STATUSBAR(labels[27]),1,"");
 
     gtk_builder_connect_signals(builder, NULL);

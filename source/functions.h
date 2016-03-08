@@ -1,5 +1,6 @@
 void on_Mainwindow_destroy();
 void on_quit_clicked();
+void on_demotoggle_toggled();
 void on_Powertoggle_toggled();
 void on_Onoffsetbtn_clicked(GtkButton *button,gpointer   user_data);
 void on_Sendpowersetbtn_clicked(GtkButton *button,gpointer   user_data);

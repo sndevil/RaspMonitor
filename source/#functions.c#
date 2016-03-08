@@ -138,8 +138,6 @@ void tick(GtkLabel** labels)
       gtk_spinner_stop(GTK_SPINNER(labels[28]));
       checkTemperature(labels[26]);
     }
-
-
 }
 
 
