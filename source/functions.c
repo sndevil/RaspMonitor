@@ -1,5 +1,5 @@
 #include <gtk/gtk.h>
-
+#include <math.h>
 #define PROCESS_MEDIUM_THRESHOLD 20
 #define CONTROL_MEDIUM_THRESHOLD 20
 #define RACK_MEDIUM_THRESHOLD 20
@@ -15,7 +15,6 @@ bool powertoggle = false;
 bool datareceived = false;
 
 enum lockstat { locked, searching, found};
-//typedef enum { locked, notlocked} LockStat;
 
 enum lockstat carrierstat = searching;
 enum lockstat timingstat = searching;
@@ -104,6 +103,12 @@ void strdbl(char* out, double i)
 
 void tick(GtkLabel** labels)
 {
+  double rand1,rand2,rand3,rand4;
+  
+  rand1 = rand()%40;
+  rand2 = rand();
+  rand3 = (double)(rand()%100000)/100000;
+  rand4 = rand()%24;
   if (timingstat > 2)
     timingstat = 0;
   if (carrierstat > 2)
@@ -117,34 +122,35 @@ void tick(GtkLabel** labels)
     {
       gtk_spinner_start(GTK_SPINNER(labels[28]));
       gtk_statusbar_push(GTK_STATUSBAR(labels[27]),1,"Receiving Data");
-      processtemp = rand()%40;
-      controltemp = rand()%40;
-      racktemp = rand()%40;
-      patemp = rand()%40;  
+      processtemp = rand1;
+      controltemp = rand1;
+      racktemp = rand1;
+      patemp = rand1;  
       changeLabeldbl(labels[0],(rand() % 210)/10);
       changeLabeldbl(labels[1],(rand() % 50000));
       changeStatusLabel(labels[2],carrierstat++);
       changeStatusLabel(labels[3],timingstat++);
       changeLabeldbl(labels[4],(rand()%300)/10);
+      changelabelBER(labels[5],rand3);
       changeLabel(labels[6],(int)(rand()%50));
       changeLabel(labels[7],(int)(processtemp));
       changeLabel(labels[8],(int)(controltemp));
       changeLabel(labels[9],(int)(racktemp));
       changeLabel(labels[10],(int)(patemp));
-      changeLabel(labels[12],(int)(rand()%40));
-      changeLabel(labels[13],(int)(rand()%40));
-      changeLabel(labels[14],(int)(rand()%40));
-      changeLabel(labels[15],(int)(rand()%40));
-      changeLabel(labels[16],(int)(rand()%40));
-      changeLabel(labels[17],(int)(rand()%40));
-      changeLabeldbl(labels[18],(rand()%24));
-      changeLabeldbl(labels[19],(rand()%4));
+      changeLabel(labels[12],(int)(rand1));
+      changeLabel(labels[13],(int)(rand1));
+      changeLabel(labels[14],(int)(rand1));
+      changeLabel(labels[15],(int)(rand1));
+      changeLabel(labels[16],(int)(rand1));
+      changeLabel(labels[17],(int)(rand1));
+      changeLabeldbl(labels[18],(rand4));
+      changeLabeldbl(labels[19],(rand1));
       changeStatusLabel(labels[20],systemstat++);
-      changeLabeldbl(labels[21],rand());
+      changeLabeldbl(labels[21],rand2);
       changeStatusLabel(labels[22],externalsourcestat++);
-      changeLabeldbl(labels[23],rand());
-      changeLabeldbl(labels[24],rand());
-      changeLabeldbl(labels[25],rand());
+      changeLabeldbl(labels[23],rand2);
+      changeLabeldbl(labels[24],rand2);
+      changeLabeldbl(labels[25],rand2);
       checkTemperature(labels[26]);
     }
   else
@@ -188,6 +194,18 @@ void changeStatusLabel(GtkLabel *label, enum lockstat status)
       gtk_label_set_text(label,"Found");
       break;
     }
+}
+
+void changelabelBER(GtkLabel *label, double value)
+{
+  int power;
+  double base;
+  char out[13];
+  power = floor(log10(value));
+  base = value / (pow(10,power));
+  snprintf(out,13,"%e",value);//,base,power);
+  gtk_label_set_text(label,out);
+  //printf("input: %f\n",value);
 }
 
 void checkTemperature(GtkLabel *label)

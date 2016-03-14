@@ -14,5 +14,6 @@ void strdbl(char* out,double i);
 void changeLabel(GtkLabel *label, int num);
 void changeLabeldbl(GtkLabel *label, double num);
 void changeStatusLabel(GtkLabel *label, enum lockstat status);//lockstat status);
+void changelabelBER(GtkLabel *label, double value);
 
 void checkTemperature(GtkLabel *label);
