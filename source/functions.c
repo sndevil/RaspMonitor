@@ -12,8 +12,15 @@
 
 typedef enum { false, true } bool;
 bool powertoggle = false;
-
 bool datareceived = false;
+
+enum lockstat { locked, searching, found};
+//typedef enum { locked, notlocked} LockStat;
+
+enum lockstat carrierstat = searching;
+enum lockstat timingstat = searching;
+enum lockstat systemstat = searching;
+enum lockstat externalsourcestat = searching;
 
 double processtemp=0,controltemp=0, racktemp=0, patemp=0;
 
@@ -93,10 +100,18 @@ void str(char* out, int i)
 void strdbl(char* out, double i)
 {
   snprintf(out,10,"%f",i);
-}
+ }
 
 void tick(GtkLabel** labels)
 {
+  if (timingstat > 2)
+    timingstat = 0;
+  if (carrierstat > 2)
+    carrierstat = 0;
+  if (systemstat > 2)
+    systemstat = 0;
+  if (externalsourcestat > 2)
+    externalsourcestat = 0;
   g_timeout_add_seconds(1,tick,labels);
   if (datareceived)
     {
@@ -108,6 +123,8 @@ void tick(GtkLabel** labels)
       patemp = rand()%40;  
       changeLabeldbl(labels[0],(rand() % 210)/10);
       changeLabeldbl(labels[1],(rand() % 50000));
+      changeStatusLabel(labels[2],carrierstat++);
+      changeStatusLabel(labels[3],timingstat++);
       changeLabeldbl(labels[4],(rand()%300)/10);
       changeLabel(labels[6],(int)(rand()%50));
       changeLabel(labels[7],(int)(processtemp));
@@ -122,7 +139,9 @@ void tick(GtkLabel** labels)
       changeLabel(labels[17],(int)(rand()%40));
       changeLabeldbl(labels[18],(rand()%24));
       changeLabeldbl(labels[19],(rand()%4));
+      changeStatusLabel(labels[20],systemstat++);
       changeLabeldbl(labels[21],rand());
+      changeStatusLabel(labels[22],externalsourcestat++);
       changeLabeldbl(labels[23],rand());
       changeLabeldbl(labels[24],rand());
       changeLabeldbl(labels[25],rand());
@@ -138,8 +157,6 @@ void tick(GtkLabel** labels)
       gtk_spinner_stop(GTK_SPINNER(labels[28]));
       checkTemperature(labels[26]);
     }
-
-
 }
 
 
@@ -155,6 +172,22 @@ void changeLabeldbl(GtkLabel *label, double num)
   char stri[10];
   strdbl(stri,num);
   gtk_label_set_text(label,stri);
+}
+
+void changeStatusLabel(GtkLabel *label, enum lockstat status)
+{
+  switch (status)
+    {
+    case locked:
+      gtk_label_set_text(label,"Locked");
+      break;
+    case searching:
+      gtk_label_set_text(label,"Searching");
+      break;
+    case found:
+      gtk_label_set_text(label,"Found");
+      break;
+    }
 }
 
 void checkTemperature(GtkLabel *label)
