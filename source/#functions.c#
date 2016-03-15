@@ -48,7 +48,6 @@ void on_Powertoggle_toggled()
 void on_Onoffsetbtn_clicked()
 {
   printf("toggled: %d\n",powertoggle);
-
 }
 
 void on_Sendpowersetbtn_clicked(GtkButton *button, gpointer user_data)

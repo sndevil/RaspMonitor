@@ -1,5 +1,4 @@
 #include <gtk/gtk.h>
-//#include "functions.h"
 
 GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
 {
