@@ -7,6 +7,11 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
   GtkBuilder  *builder;
   GtkLabel **labels;
   GtkWidget *page;
+  GtkContainer *viewport;
+  GtkTextBuffer *textbuffer;
+  GtkTextIter textiter;
+
+  //GtkNotebook *notebook;
 
     builder = gtk_builder_new();
     labels = malloc(30 * sizeof(GtkLabel*));
@@ -41,8 +46,24 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     labels[26] = GTK_LABEL(gtk_builder_get_object(builder, "staticons"));
     labels[27] = GTK_WIDGET(gtk_builder_get_object(builder, "Statusbar"));
     labels[28] = GTK_WIDGET(gtk_builder_get_object(builder, "loading"));
-    gtk_statusbar_push (GTK_STATUSBAR(labels[27]),1,"");
 
+    labels[29] = GTK_WIDGET(gtk_builder_get_object(builder, "box3"));//"Logscrolledwindow"));
+    viewport = GTK_CONTAINER(gtk_builder_get_object(builder,"viewport4"));
+    g_object_ref (labels[29]);
+    gtk_container_remove (viewport,labels[29]);
+    
+    labels[30] = gtk_builder_get_object(builder, "logbuffer");
+    
+    //textbuffer = gtk_builder_get_object(builder, "logbuffer");
+    // gtk_text_buffer_get_start_iter(labels[30],&textiter);
+    //gtk_text_buffer_insert(labels[30],&textiter,"hey",3);
+
+    gtk_statusbar_push (GTK_STATUSBAR(labels[27]),1,"");
+    
+    *notebook = GTK_NOTEBOOK(gtk_builder_get_object(builder,"notebook"));
+    gtk_notebook_insert_page (*notebook,
+			      labels[29],
+			      gtk_label_new("Log"), 2);
     gtk_builder_connect_signals(builder, NULL);
     g_object_unref(builder);
     gtk_widget_show_all(window);

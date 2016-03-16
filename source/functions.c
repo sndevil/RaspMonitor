@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
+#include <time.h>
+
 #define PROCESS_MEDIUM_THRESHOLD 20
 #define CONTROL_MEDIUM_THRESHOLD 20
 #define RACK_MEDIUM_THRESHOLD 20
@@ -123,6 +125,7 @@ void tick(GtkLabel** labels)
 
   if (datareceived)
     {
+      writelog(labels[30],"data received");
       gtk_spinner_start(GTK_SPINNER(labels[28]));
       gtk_statusbar_push(GTK_STATUSBAR(labels[27]),1,"Receiving Data");
       processtemp = rand1;
@@ -208,6 +211,28 @@ void changelabelBER(GtkLabel *label, double value)
   base = value / (pow(10,power));
   snprintf(out,13,"%e",value);
   gtk_label_set_text(label,out);
+}
+
+void writelog(GtkTextBuffer *label, const char* str)
+{
+  gchar* out;//,current = "hello";
+  char current[20];
+  time_t seconds,minute,hour,timet;
+  GtkTextIter textiter;
+
+  timet = time(NULL);
+  seconds = timet%60;
+  minute = (timet/60)%60;
+  hour = (timet/3600)%24;
+  snprintf(current,strlen(str)+13,"%02d:%02d:%02d : %s\n",hour,minute,seconds,str);
+  gtk_text_buffer_get_start_iter(label,&textiter);
+  gtk_text_buffer_insert(label,&textiter,current,strlen(current));
+
+}
+
+void clear_log(GtkTextBuffer *label)
+{
+  gtk_label_set_text(label,"");
 }
 
 void checkTemperature(GtkLabel *label)
