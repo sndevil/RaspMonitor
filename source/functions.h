@@ -8,6 +8,8 @@ void on_Sendratesetbtn_clicked(GtkButton *button,gpointer   user_data);
 void on_Receiveratesetbtn_clicked(GtkButton *button,gpointer   user_data);
 void on_Sendfreqsetbtn_clicked(GtkButton *button,gpointer   user_data);
 void on_Receivefreqsetbtn_clicked(GtkButton *button,gpointer   user_data);
+void on_Clearbtn_clicked(GtkButton *button, gpointer user_data);
+void on_Savebtn_clicked(GtkButton *button, gpointer user_data);
 void tick(GtkLabel** labels);
 void str(char* out,int i);
 void strdbl(char* out,double i);
@@ -18,4 +20,4 @@ void changelabelBER(GtkLabel *label, double value);
 void writelog(GtkTextBuffer *label, const char* str);
 void clear_log(GtkTextBuffer *label);
 
-void checkTemperature(GtkLabel *label);
+void checkTemperature(GtkTextBuffer *label);

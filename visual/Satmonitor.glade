@@ -19,15 +19,48 @@
                 <property name="margin_top">3</property>
                 <property name="orientation">vertical</property>
                 <child>
-                  <object class="GtkButton" id="Clearbtn">
-                    <property name="label" translatable="yes">Clear</property>
-                    <property name="use_action_appearance">False</property>
-                    <property name="width_request">200</property>
+                  <object class="GtkGrid" id="grid3">
                     <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="receives_default">True</property>
-                    <property name="halign">center</property>
-                    <property name="use_action_appearance">False</property>
+                    <property name="can_focus">False</property>
+                    <property name="column_homogeneous">True</property>
+                    <child>
+                      <object class="GtkButton" id="Clearbtn">
+                        <property name="label" translatable="yes">Clear</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="width_request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_Clearbtn_clicked" object="logbuffer" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkButton" id="Savebtn">
+                        <property name="label" translatable="yes">Save</property>
+                        <property name="use_action_appearance">False</property>
+                        <property name="width_request">200</property>
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="receives_default">True</property>
+                        <property name="halign">center</property>
+                        <property name="use_action_appearance">False</property>
+                        <signal name="clicked" handler="on_Savebtn_clicked" object="logbuffer" swapped="no"/>
+                      </object>
+                      <packing>
+                        <property name="left_attach">0</property>
+                        <property name="top_attach">0</property>
+                        <property name="width">1</property>
+                        <property name="height">1</property>
+                      </packing>
+                    </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
@@ -76,34 +109,6 @@
     <property name="value">1.5</property>
     <property name="step_increment">0.01</property>
     <property name="page_increment">0.10000000000000001</property>
-  </object>
-  <object class="GtkAdjustment" id="Receiverateadjustment">
-    <property name="lower">1</property>
-    <property name="upper">2048</property>
-    <property name="value">1024</property>
-    <property name="step_increment">10</property>
-    <property name="page_increment">100</property>
-  </object>
-  <object class="GtkAdjustment" id="Sendfreqadjustment">
-    <property name="lower">0.10000000000000001</property>
-    <property name="upper">3</property>
-    <property name="value">2</property>
-    <property name="step_increment">0.01</property>
-    <property name="page_increment">0.10000000000000001</property>
-  </object>
-  <object class="GtkAdjustment" id="Sendpoweradjustment">
-    <property name="lower">30</property>
-    <property name="upper">43</property>
-    <property name="value">35</property>
-    <property name="step_increment">0.10000000000000001</property>
-    <property name="page_increment">1</property>
-  </object>
-  <object class="GtkAdjustment" id="Sendrateadjustment">
-    <property name="lower">1</property>
-    <property name="upper">2048</property>
-    <property name="value">1024</property>
-    <property name="step_increment">10</property>
-    <property name="page_increment">100</property>
   </object>
   <object class="GtkWindow" id="Mainwindow">
     <property name="width_request">480</property>
@@ -1238,6 +1243,34 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="Receiverateadjustment">
+    <property name="lower">1</property>
+    <property name="upper">2048</property>
+    <property name="value">1024</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">100</property>
+  </object>
+  <object class="GtkAdjustment" id="Sendfreqadjustment">
+    <property name="lower">0.10000000000000001</property>
+    <property name="upper">3</property>
+    <property name="value">2</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">0.10000000000000001</property>
+  </object>
+  <object class="GtkAdjustment" id="Sendpoweradjustment">
+    <property name="lower">30</property>
+    <property name="upper">43</property>
+    <property name="value">35</property>
+    <property name="step_increment">0.10000000000000001</property>
+    <property name="page_increment">1</property>
+  </object>
+  <object class="GtkAdjustment" id="Sendrateadjustment">
+    <property name="lower">1</property>
+    <property name="upper">2048</property>
+    <property name="value">1024</property>
+    <property name="step_increment">10</property>
+    <property name="page_increment">100</property>
   </object>
   <object class="GtkTextBuffer" id="logbuffer"/>
 </interface>

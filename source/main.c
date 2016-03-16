@@ -18,7 +18,8 @@ int main(int argc, char *argv[])
     gtk_init(&argc, &argv);
     labels = initgui(&window,&notebook);
 
-    tick(labels);
+    //tick(labels);
+    g_timeout_add_seconds(1,tick,labels);
     gtk_main();
 
     return 0;

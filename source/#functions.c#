@@ -24,6 +24,7 @@ enum lockstat systemstat = searching;
 enum lockstat externalsourcestat = searching;
 
 double processtemp=0,controltemp=0, racktemp=0, patemp=0;
+double rand1,rand2,rand3,rand4;
 
 void on_Mainwindow_destroy()
 {
@@ -93,6 +94,60 @@ void on_Receivefreqsetbtn_clicked(GtkButton *button, gpointer user_data)
   printf("value: %f\n",val);
 }
 
+void on_Clearbtn_clicked(GtkButton *button, gpointer user_data)
+{
+  GtkTextIter start,end;
+  GtkTextBuffer *buffer = user_data;// GTK_TEXTBUFFER(user_data);
+  gtk_text_buffer_get_start_iter(buffer,&start);
+  gtk_text_buffer_get_end_iter(buffer,&end);
+  gtk_text_buffer_delete(buffer,&start,&end);
+}
+
+void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
+{
+  GtkWidget *dialog;
+  GtkTextBuffer *textbuffer;
+  GtkFileChooser *chooser;
+  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+  gint res;
+
+  textbuffer = user_data;
+  dialog = gtk_file_chooser_dialog_new ("Save File",
+                                      NULL,
+                                      action,
+                                      "_Cancel",
+                                      GTK_RESPONSE_CANCEL,
+                                      "_Save",
+                                      GTK_RESPONSE_ACCEPT,
+                                      NULL);
+  chooser = GTK_FILE_CHOOSER (dialog);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
+
+    gtk_file_chooser_set_current_name (chooser,
+                                       "Untitled document.txt");
+
+  res = gtk_dialog_run (GTK_DIALOG (dialog));
+  if (res == GTK_RESPONSE_ACCEPT)
+    {
+      char *filename;
+      char *content;
+      GtkTextIter start,end;
+      FILE *f;
+
+      filename = gtk_file_chooser_get_filename (chooser);
+      gtk_text_buffer_get_start_iter(textbuffer,&start);
+      gtk_text_buffer_get_end_iter(textbuffer,&end);
+      content = gtk_text_buffer_get_text(textbuffer,&start,&end,FALSE);
+      
+      f = fopen(filename,"w");
+      fwrite(content,sizeof(char),strlen(content),f);
+      fclose(f);
+    }
+
+ gtk_widget_destroy (dialog);
+}
+
 void str(char* out, int i)
 {
   snprintf(out,10,"%d",i);
@@ -105,10 +160,6 @@ void strdbl(char* out, double i)
 
 void tick(GtkLabel** labels)
 {
-  double rand1,rand2,rand3,rand4;
-
-  g_timeout_add_seconds(1,tick,labels);  
-
   rand1 = (double)(rand()%4000)/100;
   rand2 = (double)(rand()%10000)/100;
   rand3 = (double)(rand()%100000)/1000000;
@@ -158,6 +209,7 @@ void tick(GtkLabel** labels)
       changeLabeldbl(labels[24],rand2);
       changeLabeldbl(labels[25],rand2);
       checkTemperature(labels[30]);
+      //writelog(labels[30],"?!");
     }
   else
     {
@@ -216,7 +268,7 @@ void changelabelBER(GtkLabel *label, double value)
 void writelog(GtkTextBuffer *label, const char* str)
 {
   gchar* out;//,current = "hello";
-  char current[20];
+  char current[40];
   time_t seconds,minute,hour,timet;
   GtkTextIter textiter;
 
@@ -235,28 +287,32 @@ void clear_log(GtkTextBuffer *label)
   gtk_label_set_text(label,"");
 }
 
-void checkTemperature(GtkLabel *label)
+void checkTemperature(GtkTextBuffer *label)
 {
   if (processtemp > PROCESS_HIGH_THRESHOLD)
     //gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">Process Temperature ALERT</span>");
-      writelog(labels[30],"Process Temperature ALERT");
+      writelog(label,"Process Temperature ALERT");
   if (controltemp > CONTROL_HIGH_THRESHOLD)
     //gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">Control Temperature ALERT</span>");
-      writelog(labels[30],"Control Temperature ALERT");
+      writelog(label,"Control Temperature ALERT");
   if (racktemp > RACK_HIGH_THRESHOLD)
     //gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">Rack Temperature ALERT</span>");
-      writelog(labels[30],"Rack Temperature ALERT");
+      writelog(label,"Rack Temperature ALERT");
   if (patemp > PA_HIGH_THRESHOLD)
-     
- gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">PA Temperature ALERT</span>");
-  else if (processtemp > PROCESS_MEDIUM_THRESHOLD)
-      gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Process Temperature High</span>");
-  else if (controltemp > CONTROL_MEDIUM_THRESHOLD)
-      gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Control Temperature High</span>");
-  else if (racktemp > RACK_MEDIUM_THRESHOLD)
-      gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Rack Temperature High</span>");
-  else if (patemp > PA_MEDIUM_THRESHOLD)
-      gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">PA Temperature High</span>");
-  else
-    gtk_label_set_text(label, "");
+    //gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">PA Temperature ALERT</span>");
+    writelog(label,"PA Temperature ALERT");
+  if (processtemp > PROCESS_MEDIUM_THRESHOLD)
+    //gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Process Temperature High</span>");
+    writelog(label,"Process Temperature High");
+  if (controltemp > CONTROL_MEDIUM_THRESHOLD)
+    //gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Control Temperature High</span>");
+    writelog(label,"Control Temperature High");
+  if (racktemp > RACK_MEDIUM_THRESHOLD)
+    //gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Rack Temperature High</span>");
+    writelog(label,"Rack Temperature High");
+  if (patemp > PA_MEDIUM_THRESHOLD)
+    //gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">PA Temperature High</span>");
+    writelog(label,"PA Temperature High");
+  //else
+  //gtk_label_set_text(label, "");
 }
