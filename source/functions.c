@@ -13,6 +13,8 @@
 #define RACK_HIGH_THRESHOLD 30
 #define PA_HIGH_THRESHOLD 30
 
+#define SERIAL_BUFFER_SIZE 512
+
 typedef enum { false, true } bool;
 bool powertoggle = false;
 bool datareceived = false;
@@ -203,16 +205,16 @@ void tick(GtkLabel** labels)
 
   if (portopen == true)
     {
-      char input[2048];
+      char input[SERIAL_BUFFER_SIZE];
       memset(input,'\r',sizeof input);
       SerialRead(USB,&input);
-      for (i = 0;i< 2048;i++)
+      for (i = 0;i< SERIAL_BUFFER_SIZE;i++)
 	{
 	  if (input[i] == 126)
 	    pps++;
-	  printf("%c",input[i]);
+	  //printf("%c",input[i]);
 	}
-      printf("\n %d Packets per second\n",pps);
+      printf("%d Packets per second\n",pps);
     }
 
   if (datareceived)

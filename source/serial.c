@@ -2,14 +2,14 @@
 #include <errno.h>
 #include <termios.h>
 
-char response[2048];
+#define INPUT_BUFFER_SIZE 512
+
 int SerialOpen(char* devicename,speed_t Baudrate)
 {
   int USB;
   struct termios tty;
   struct termios tty_old;
   memset (&tty, 0, sizeof tty);
-  memset(response, '\0', sizeof response);
   USB = open(devicename, O_RDWR| O_NOCTTY );
   /* Error Handling */
   if ( tcgetattr ( USB, &tty ) != 0 ) {
@@ -60,17 +60,13 @@ void SerialWrite(char* towrite, int Device)
 void SerialRead(int Device,char* buffer)
 {
   int n = 0,
-    spot = 0,i;
+    spot = 0;
   char buf;
-  char res[2048];
   do {
     n = read( Device, &buf, 1 );
-    sprintf( &res[spot], "%c", buf );
+    sprintf( &buffer[spot], "%c", buf );
     spot += n;
-  } while( spot<2048 && n > 0);
-
-  for (i = 0; i < spot; i++)
-      buffer[i] = res[i];
+  } while( spot< INPUT_BUFFER_SIZE && n > 0);
 
   if (n < 0) {
     printf("Error reading: %s\n",strerror(errno));
