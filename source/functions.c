@@ -1,6 +1,7 @@
 #include <gtk/gtk.h>
 #include <math.h>
 #include <time.h>
+#include <termios.h>
 
 #define PROCESS_MEDIUM_THRESHOLD 20
 #define CONTROL_MEDIUM_THRESHOLD 20
@@ -16,6 +17,8 @@ typedef enum { false, true } bool;
 bool powertoggle = false;
 bool datareceived = false;
 
+bool portopen = false;
+
 enum lockstat { locked, searching, found};
 
 enum lockstat carrierstat = searching;
@@ -25,6 +28,7 @@ enum lockstat externalsourcestat = searching;
 
 double processtemp=0,controltemp=0, racktemp=0, patemp=0;
 double rand1,rand2,rand3,rand4;
+int USB;
 
 void on_Mainwindow_destroy()
 {
@@ -103,6 +107,14 @@ void on_Clearbtn_clicked(GtkButton *button, gpointer user_data)
   gtk_text_buffer_delete(buffer,&start,&end);
 }
 
+void on_openportbtn_clicked(GtkButton *button, gpointer user_data)
+{
+  USB = SerialOpen("/dev/ttyUSB0",(speed_t)B4800);
+  portopen = true;
+  printf("Port Opened: %d\n",USB);
+}
+
+
 void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
 {
   GtkWidget *dialog;
@@ -143,9 +155,6 @@ void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
       f = fopen(filename,"w");
       fwrite(content,sizeof(char),strlen(content),f);
       fclose(f);
-      //printf("%s\n",filename);
-      //save_to_file (filename);
-      //g_free (filename);
     }
 
  gtk_widget_destroy (dialog);
@@ -163,7 +172,11 @@ void strdbl(char* out, double i)
 
 void tick(GtkLabel** labels)
 {
+  double rand5,rand6,rand7;
   rand1 = (double)(rand()%4000)/100;
+  rand5 = (double)(rand()%4000)/100;
+  rand6 = (double)(rand()%4000)/100;
+  rand7 = (double)(rand()%4000)/100;
   rand2 = (double)(rand()%10000)/100;
   rand3 = (double)(rand()%100000)/1000000;
   rand4 = (double)(rand()%2400)/100;
@@ -176,16 +189,20 @@ void tick(GtkLabel** labels)
   if (externalsourcestat > 2)
     externalsourcestat = 0;
 
+  if (portopen == true)
+    {
+      char* input = SerialRead(USB);
+      printf("input data: %s  length: %d\n",input,strlen(input));
+    }
 
   if (datareceived)
     {
-      //writelog(labels[30],"data received");
       gtk_spinner_start(GTK_SPINNER(labels[28]));
       gtk_statusbar_push(GTK_STATUSBAR(labels[27]),1,"Receiving Data");
       processtemp = rand1;
-      controltemp = rand1;
-      racktemp = rand1;
-      patemp = rand1;  
+      controltemp = rand5;
+      racktemp = rand6;
+      patemp = rand7;  
       changeLabeldbl(labels[0],(double)(rand() % 210)/10);
       changeLabeldbl(labels[1],(rand() % 50000));
       changeStatusLabel(labels[2],carrierstat++);
@@ -212,7 +229,6 @@ void tick(GtkLabel** labels)
       changeLabeldbl(labels[24],rand2);
       changeLabeldbl(labels[25],rand2);
       checkTemperature(labels[30]);
-      //writelog(labels[30],"?!");
     }
   else
     {
@@ -270,7 +286,7 @@ void changelabelBER(GtkLabel *label, double value)
 
 void writelog(GtkTextBuffer *label, const char* str)
 {
-  gchar* out;//,current = "hello";
+  gchar* out;
   char current[40];
   time_t seconds,minute,hour,timet;
   GtkTextIter textiter;
@@ -293,29 +309,20 @@ void clear_log(GtkTextBuffer *label)
 void checkTemperature(GtkTextBuffer *label)
 {
   if (processtemp > PROCESS_HIGH_THRESHOLD)
-    //gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">Process Temperature ALERT</span>");
       writelog(label,"Process Temperature ALERT");
   if (controltemp > CONTROL_HIGH_THRESHOLD)
-    //gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">Control Temperature ALERT</span>");
       writelog(label,"Control Temperature ALERT");
   if (racktemp > RACK_HIGH_THRESHOLD)
-    //gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">Rack Temperature ALERT</span>");
       writelog(label,"Rack Temperature ALERT");
   if (patemp > PA_HIGH_THRESHOLD)
-    //gtk_label_set_markup(label,"<span background=\"#ff9999\" size=\"medium\">PA Temperature ALERT</span>");
     writelog(label,"PA Temperature ALERT");
   if (processtemp > PROCESS_MEDIUM_THRESHOLD)
-    //gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Process Temperature High</span>");
     writelog(label,"Process Temperature High");
   if (controltemp > CONTROL_MEDIUM_THRESHOLD)
-    //gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Control Temperature High</span>");
     writelog(label,"Control Temperature High");
   if (racktemp > RACK_MEDIUM_THRESHOLD)
-    //gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">Rack Temperature High</span>");
     writelog(label,"Rack Temperature High");
   if (patemp > PA_MEDIUM_THRESHOLD)
-    //gtk_label_set_markup(label,"<span background=\"#ffff99\" size=\"medium\">PA Temperature High</span>");
     writelog(label,"PA Temperature High");
-  //else
-  //gtk_label_set_text(label, "");
+
 }

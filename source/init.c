@@ -11,8 +11,6 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
   GtkTextBuffer *textbuffer;
   GtkTextIter textiter;
 
-  //GtkNotebook *notebook;
-
     builder = gtk_builder_new();
     labels = malloc(30 * sizeof(GtkLabel*));
     gtk_builder_add_from_file (builder, "visual/Satmonitor.glade", NULL);
@@ -54,10 +52,6 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     
     labels[30] = gtk_builder_get_object(builder, "logbuffer");
     
-    //textbuffer = gtk_builder_get_object(builder, "logbuffer");
-    // gtk_text_buffer_get_start_iter(labels[30],&textiter);
-    //gtk_text_buffer_insert(labels[30],&textiter,"hey",3);
-
     gtk_statusbar_push (GTK_STATUSBAR(labels[27]),1,"");
     
     *notebook = GTK_NOTEBOOK(gtk_builder_get_object(builder,"notebook"));
