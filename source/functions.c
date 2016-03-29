@@ -109,9 +109,20 @@ void on_Clearbtn_clicked(GtkButton *button, gpointer user_data)
 
 void on_openportbtn_clicked(GtkButton *button, gpointer user_data)
 {
-  USB = SerialOpen("/dev/ttyUSB0",(speed_t)B4800);
-  portopen = true;
-  printf("Port Opened: %d\n",USB);
+  if (portopen == false)
+    {
+      USB = SerialOpen("/dev/ttyUSB0",(speed_t)B115200);
+      portopen = true;
+      printf("Port Opened: %d\n",USB);
+      gtk_button_set_label(button, "Close Port");
+    }
+  else
+    {
+      close(USB);
+      portopen = false;
+      printf("Port%d Closed\n", USB);
+      gtk_button_set_label(button, "Open Port");
+    }
 }
 
 
@@ -136,7 +147,7 @@ void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
 
   gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
 
-    gtk_file_chooser_set_current_name (chooser,
+  gtk_file_chooser_set_current_name (chooser,
                                        "Untitled document.txt");
 
   res = gtk_dialog_run (GTK_DIALOG (dialog));
@@ -173,6 +184,7 @@ void strdbl(char* out, double i)
 void tick(GtkLabel** labels)
 {
   double rand5,rand6,rand7;
+  int i,pps=0;
   rand1 = (double)(rand()%4000)/100;
   rand5 = (double)(rand()%4000)/100;
   rand6 = (double)(rand()%4000)/100;
@@ -191,8 +203,16 @@ void tick(GtkLabel** labels)
 
   if (portopen == true)
     {
-      char* input = SerialRead(USB);
-      printf("input data: %s  length: %d\n",input,strlen(input));
+      char input[2048];
+      memset(input,'\r',sizeof input);
+      SerialRead(USB,&input);
+      for (i = 0;i< 2048;i++)
+	{
+	  if (input[i] == 126)
+	    pps++;
+	  printf("%c",input[i]);
+	}
+      printf("\n %d Packets per second\n",pps);
     }
 
   if (datareceived)

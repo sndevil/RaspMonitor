@@ -103,13 +103,6 @@
       </object>
     </child>
   </object>
-  <object class="GtkAdjustment" id="Receivefreqadjustment">
-    <property name="lower">0.10000000000000001</property>
-    <property name="upper">3</property>
-    <property name="value">1.5</property>
-    <property name="step_increment">0.01</property>
-    <property name="page_increment">0.10000000000000001</property>
-  </object>
   <object class="GtkWindow" id="Mainwindow">
     <property name="width_request">480</property>
     <property name="height_request">260</property>
@@ -1088,8 +1081,8 @@
                         <property name="orientation">vertical</property>
                         <property name="spacing">4</property>
                         <child>
-                          <object class="GtkButton" id="button3">
-                            <property name="label" translatable="yes">Save</property>
+                          <object class="GtkButton" id="openportbtn">
+                            <property name="label" translatable="yes">Open Port</property>
                             <property name="use_action_appearance">False</property>
                             <property name="width_request">200</property>
                             <property name="visible">True</property>
@@ -1097,46 +1090,12 @@
                             <property name="receives_default">True</property>
                             <property name="halign">center</property>
                             <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_openportbtn_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
                             <property name="position">0</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="button4">
-                            <property name="label" translatable="yes">Load</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="width_request">200</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="halign">center</property>
-                            <property name="use_action_appearance">False</property>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">1</property>
-                          </packing>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="quitbtn">
-                            <property name="label" translatable="yes">Quit</property>
-                            <property name="use_action_appearance">False</property>
-                            <property name="width_request">200</property>
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="receives_default">True</property>
-                            <property name="halign">center</property>
-                            <property name="use_action_appearance">False</property>
-                            <signal name="clicked" handler="on_quit_clicked" swapped="no"/>
-                          </object>
-                          <packing>
-                            <property name="expand">False</property>
-                            <property name="fill">True</property>
-                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -1154,12 +1113,12 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
-                          <object class="GtkButton" id="openportbtn">
-                            <property name="label" translatable="yes">Open Port</property>
+                          <object class="GtkButton" id="button3">
+                            <property name="label" translatable="yes">Save</property>
                             <property name="use_action_appearance">False</property>
                             <property name="width_request">200</property>
                             <property name="visible">True</property>
@@ -1167,7 +1126,41 @@
                             <property name="receives_default">True</property>
                             <property name="halign">center</property>
                             <property name="use_action_appearance">False</property>
-                            <signal name="clicked" handler="on_openportbtn_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">2</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button4">
+                            <property name="label" translatable="yes">Load</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="width_request">200</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="halign">center</property>
+                            <property name="use_action_appearance">False</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">3</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="quitbtn">
+                            <property name="label" translatable="yes">Quit</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="width_request">200</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="halign">center</property>
+                            <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_quit_clicked" swapped="no"/>
                           </object>
                           <packing>
                             <property name="expand">False</property>
@@ -1261,6 +1254,13 @@
         </child>
       </object>
     </child>
+  </object>
+  <object class="GtkAdjustment" id="Receivefreqadjustment">
+    <property name="lower">0.10000000000000001</property>
+    <property name="upper">3</property>
+    <property name="value">1.5</property>
+    <property name="step_increment">0.01</property>
+    <property name="page_increment">0.10000000000000001</property>
   </object>
   <object class="GtkAdjustment" id="Receiverateadjustment">
     <property name="lower">1</property>

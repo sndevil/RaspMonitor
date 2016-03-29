@@ -22,10 +22,6 @@ int main(int argc, char *argv[])
     gtk_init(&argc, &argv);
     labels = initgui(&window,&notebook);
     
-    //USB = SerialOpen("/dev/ttyUSB0",(speed_t)B115200);
-    //input = SerialRead(USB);
-    //printf("Successful: %s\n",input);
-    //tick(labels);
     g_timeout_add_seconds(1,tick,labels);
     gtk_main();
 

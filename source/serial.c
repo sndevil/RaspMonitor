@@ -2,7 +2,7 @@
 #include <errno.h>
 #include <termios.h>
 
-char response[1024];
+char response[2048];
 int SerialOpen(char* devicename,speed_t Baudrate)
 {
   int USB;
@@ -57,23 +57,21 @@ void SerialWrite(char* towrite, int Device)
   } while (towrite[spot-1] != '\r' && n_written > 0);
 }
 
-char* SerialRead(int Device)
+void SerialRead(int Device,char* buffer)
 {
   int n = 0,
     spot = 0,i;
   char buf;
-  char res[1024];
+  char res[2048];
   do {
     n = read( Device, &buf, 1 );
-    //printf("buf: %c\n",buf);
     sprintf( &res[spot], "%c", buf );
     spot += n;
-  } while( buf != '\0' && n > 0);
+  } while( spot<2048 && n > 0);
 
   for (i = 0; i < spot; i++)
-    response[i] = res[i];
-  for (i = spot;i< 1024;i++)
-    response[i] = '\0';
+      buffer[i] = res[i];
+
   if (n < 0) {
     printf("Error reading: %s\n",strerror(errno));
     return;
@@ -81,8 +79,4 @@ char* SerialRead(int Device)
   else if (n == 0) {
     printf("Read nothing!\n");
   }
-  else {
-    printf("Response: %s\n",response);
-  }
-  return response;
 }
