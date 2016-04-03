@@ -23,6 +23,7 @@ int main(int argc, char *argv[])
     labels = initgui(&window,&notebook);
     
     g_timeout_add_seconds(1,tick,labels);
+    //g_timeout_add_seconds(1,togglestatus,NULL);
     gtk_main();
 
     return 0;

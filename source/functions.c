@@ -13,7 +13,7 @@
 #define RACK_HIGH_THRESHOLD 30
 #define PA_HIGH_THRESHOLD 30
 
-#define SERIAL_BUFFER_SIZE 512
+#define SERIAL_BUFFER_SIZE 8192
 
 typedef enum { false, true } bool;
 bool powertoggle = false;
@@ -127,6 +127,13 @@ void on_openportbtn_clicked(GtkButton *button, gpointer user_data)
     }
 }
 
+void on_sendbtn_clicked(GtkButton *button, gpointer user_data)
+{
+  char tosend[7] = {'$','C','M','D','\0','C','\t'};
+  //printf("sending data %s, length:%d\n",tosend,strlen(tosend));
+  SerialWrite(tosend,USB);
+}
+
 
 void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
 {
@@ -208,13 +215,6 @@ void tick(GtkLabel** labels)
       char input[SERIAL_BUFFER_SIZE];
       memset(input,'\r',sizeof input);
       SerialRead(USB,&input);
-      for (i = 0;i< SERIAL_BUFFER_SIZE;i++)
-	{
-	  if (input[i] == 126)
-	    pps++;
-	  //printf("%c",input[i]);
-	}
-      printf("%d Packets per second\n",pps);
     }
 
   if (datareceived)

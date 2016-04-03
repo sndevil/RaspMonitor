@@ -1099,6 +1099,24 @@
                           </packing>
                         </child>
                         <child>
+                          <object class="GtkButton" id="sendbtn">
+                            <property name="label" translatable="yes">Send Data</property>
+                            <property name="use_action_appearance">False</property>
+                            <property name="width_request">200</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="receives_default">True</property>
+                            <property name="halign">center</property>
+                            <property name="use_action_appearance">False</property>
+                            <signal name="clicked" handler="on_sendbtn_clicked" swapped="no"/>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                        <child>
                           <object class="GtkToggleButton" id="Demotoggle">
                             <property name="label" translatable="yes">Demo Mode</property>
                             <property name="use_action_appearance">False</property>
@@ -1113,7 +1131,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">1</property>
+                            <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
@@ -1130,7 +1148,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">2</property>
+                            <property name="position">3</property>
                           </packing>
                         </child>
                         <child>
@@ -1147,7 +1165,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">3</property>
+                            <property name="position">4</property>
                           </packing>
                         </child>
                         <child>
@@ -1165,7 +1183,7 @@
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">True</property>
-                            <property name="position">4</property>
+                            <property name="position">5</property>
                           </packing>
                         </child>
                       </object>

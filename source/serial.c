@@ -1,8 +1,15 @@
+#include <gtk/gtk.h>
 #include <fcntl.h>
 #include <errno.h>
 #include <termios.h>
+#include <time.h>
 
-#define INPUT_BUFFER_SIZE 512
+#define INPUT_BUFFER_SIZE 8192
+
+typedef enum { false, true } bool;
+
+bool status = false;
+int changed = 0;
 
 int SerialOpen(char* devicename,speed_t Baudrate)
 {
@@ -47,26 +54,33 @@ int SerialOpen(char* devicename,speed_t Baudrate)
 
 void SerialWrite(char* towrite, int Device)
 {
-  //unsigned char cmd[] = "INIT \r";
   int n_written = 0,
-    spot = 0;
-
+    spot = 0,i=0;
+  //for (i = 0; i < strlen(towrite);i++)
+  //  printf("Starting to write %c\n",towrite[i]);
   do {
     n_written = write( Device, &towrite[spot], 1 );
     spot += n_written;
-  } while (towrite[spot-1] != '\r' && n_written > 0);
+    //printf("written %d bytes: %d\n", n_written,towrite[spot-1]);
+  } while (spot < 7 && n_written > 0);
 }
 
 void SerialRead(int Device,char* buffer)
 {
   int n = 0,
-    spot = 0;
+    spot = 0, pps = 0;
   char buf;
+  time_t starttime;
+  starttime = time(NULL);
+
   do {
     n = read( Device, &buf, 1 );
+    if (buf == 126)
+      pps++;
     sprintf( &buffer[spot], "%c", buf );
     spot += n;
-  } while( spot< INPUT_BUFFER_SIZE && n > 0);
+  } while( spot< INPUT_BUFFER_SIZE && n > 0 && starttime == time(NULL));
+  printf("read to %d, PacketsPerSecond: %d\n",spot,pps);
 
   if (n < 0) {
     printf("Error reading: %s\n",strerror(errno));
