@@ -15,11 +15,15 @@
 
 #define SERIAL_BUFFER_SIZE 8192
 
+const char* KeyboardPath = "/dev/ttyUSB1";
+const char* Serial1Path = "/dev/ttyUSB0";
+
 typedef enum { false, true } bool;
 bool powertoggle = false;
 bool datareceived = false;
 
 bool portopen = false;
+bool keyboardopen = false;
 
 enum lockstat { locked, searching, found};
 
@@ -30,7 +34,7 @@ enum lockstat externalsourcestat = searching;
 
 double processtemp=0,controltemp=0, racktemp=0, patemp=0;
 double rand1,rand2,rand3,rand4;
-int USB;
+int USB,KEYBOARD;
 
 void on_Mainwindow_destroy()
 {
@@ -113,7 +117,7 @@ void on_openportbtn_clicked(GtkButton *button, gpointer user_data)
 {
   if (portopen == false)
     {
-      USB = SerialOpen("/dev/ttyUSB0",(speed_t)B115200);
+      USB = SerialOpen(Serial1Path,(speed_t)B115200);
       portopen = true;
       printf("Port Opened: %d\n",USB);
       gtk_button_set_label(button, "Close Port");
@@ -264,6 +268,63 @@ void tick(GtkLabel** labels)
     }
 }
 
+void keyboardtick(GtkLabel** labels)
+{
+  keyboardopen = true;//comment this
+  if (keyboardopen)
+    {
+      //   $K[CODE]E!
+      //   [CODE] is 1 byte
+      //   [CODE] default = 0xFF
+      
+      char input[5] = "$K1E!\r";
+      //memset(input,'\r',sizeof input);
+      //SerialRead(KEYBOARD,&input);
+      input[2] = (char)1;
+      
+      printf("%s \n",input);
+      if (input[0] == '$' && input[1] == 'K'&& input[4] == '!')
+	{
+	  int command = (int)input[2];
+	  int pagenum = gtk_notebook_get_current_page(GTK_NOTEBOOK(labels[34]));
+	  GtkAdjustment * adjust;
+	  printf("Pagenum: %d \n",pagenum);
+	  switch (command)
+	    {
+	    case 1: //Up Arrow
+	      //gtk_scrolled_window_get_vadjustment ()
+	      printf ("Up Arrow pressed \n");
+	      switch (pagenum)
+		{
+		case 0:
+		  adjust = gtk_scrolled_window_get_vadjustment(labels[31]);
+		  gtk_adjustment_set_value(adjust,gtk_adjustment_get_value(adjust) - 10);
+		  printf("Adjust: %f\n",gtk_adjustment_get_upper(adjust));
+		  break;
+		}
+	      break;
+	    case 2: //Down Arrow
+	      printf ("Down arrow pressed \n");
+	      break;
+	    case 3: //Tab Button
+	      break;
+	    case 4:
+	      break;
+	    }
+	}
+      
+    }
+  else
+    {
+      KEYBOARD = SerialOpen(KeyboardPath ,(speed_t)B115200);
+      if (KEYBOARD >= 0)
+	keyboardopen = true;
+      else
+	{
+	  printf("Error opening keyboard\n");
+	}
+    }
+}
 
 void changeLabel(GtkLabel *label, int num)
 {
@@ -348,3 +409,5 @@ void checkTemperature(GtkTextBuffer *label)
     writelog(label,"PA Temperature High");
 
 }
+
+

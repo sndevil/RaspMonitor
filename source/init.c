@@ -12,7 +12,7 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
   GtkTextIter textiter;
 
     builder = gtk_builder_new();
-    labels = malloc(30 * sizeof(GtkLabel*));
+    labels = malloc(35 * sizeof(GtkLabel*));
     gtk_builder_add_from_file (builder, "visual/Satmonitor.glade", NULL);
     window = GTK_WIDGET(gtk_builder_get_object(builder, "Mainwindow"));
     labels[0] = GTK_LABEL(gtk_builder_get_object(builder, "inputpowerval"));
@@ -51,10 +51,15 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     gtk_container_remove (viewport,labels[29]);
     
     labels[30] = gtk_builder_get_object(builder, "logbuffer");
+
+    labels[31] = gtk_builder_get_object(builder, "scrolledwindow1");
+    labels[32] = gtk_builder_get_object(builder, "scrolledwindow2");
+    labels[33] = gtk_builder_get_object(builder, "scrolledwindow3");
     
     gtk_statusbar_push (GTK_STATUSBAR(labels[27]),1,"");
     
     *notebook = GTK_NOTEBOOK(gtk_builder_get_object(builder,"notebook"));
+    labels[34] = GTK_WIDGET(*notebook);
     gtk_notebook_insert_page (*notebook,
 			      labels[29],
 			      gtk_label_new("Log"), 2);
