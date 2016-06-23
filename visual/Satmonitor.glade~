@@ -38,8 +38,8 @@
     <property name="page_increment">100</property>
   </object>
   <object class="GtkWindow" id="Mainwindow">
-    <property name="width_request">480</property>
-    <property name="height_request">260</property>
+    <property name="width_request">620</property>
+    <property name="height_request">300</property>
     <property name="can_focus">False</property>
     <property name="window_position">center</property>
     <property name="default_width">450</property>
@@ -699,7 +699,7 @@
                             <signal name="clicked" handler="on_Onoffsetbtn_clicked" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
+                            <property name="left_attach">4</property>
                             <property name="top_attach">0</property>
                           </packing>
                         </child>
@@ -713,7 +713,7 @@
                             <signal name="clicked" handler="on_Sendpowersetbtn_clicked" object="Sendpoweradjustment" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
+                            <property name="left_attach">4</property>
                             <property name="top_attach">1</property>
                           </packing>
                         </child>
@@ -727,7 +727,7 @@
                             <signal name="clicked" handler="on_Sendratesetbtn_clicked" object="Sendrateadjustment" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
+                            <property name="left_attach">4</property>
                             <property name="top_attach">2</property>
                           </packing>
                         </child>
@@ -741,7 +741,7 @@
                             <signal name="clicked" handler="on_Receiveratesetbtn_clicked" object="Receiverateadjustment" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
+                            <property name="left_attach">4</property>
                             <property name="top_attach">3</property>
                           </packing>
                         </child>
@@ -755,7 +755,7 @@
                             <signal name="clicked" handler="on_Sendfreqsetbtn_clicked" object="Sendfreqadjustment" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
+                            <property name="left_attach">4</property>
                             <property name="top_attach">4</property>
                           </packing>
                         </child>
@@ -770,7 +770,7 @@
                             <signal name="clicked" handler="on_Receivefreqsetbtn_clicked" object="Receivefreqadjustment" swapped="no"/>
                           </object>
                           <packing>
-                            <property name="left_attach">3</property>
+                            <property name="left_attach">4</property>
                             <property name="top_attach">5</property>
                           </packing>
                         </child>
@@ -844,40 +844,69 @@
                           </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkEntry" id="SendPowerText">
+                            <property name="width_request">50</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="top_attach">1</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkEntry" id="SendRateText">
+                            <property name="width_request">50</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="top_attach">2</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkEntry" id="ReceiveRateText">
+                            <property name="width_request">50</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="top_attach">3</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkEntry" id="SendFreqText">
+                            <property name="width_request">50</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="top_attach">4</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
+                          <object class="GtkEntry" id="ReceiveFreqText">
+                            <property name="width_request">50</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="top_attach">5</property>
+                          </packing>
                         </child>
                         <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
+                          <object class="GtkEntry" id="OnoffText">
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                          </object>
+                          <packing>
+                            <property name="left_attach">3</property>
+                            <property name="top_attach">0</property>
+                          </packing>
                         </child>
                       </object>
                     </child>

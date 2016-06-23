@@ -34,6 +34,7 @@ enum lockstat externalsourcestat = searching;
 
 double processtemp=0,controltemp=0, racktemp=0, patemp=0;
 double rand1,rand2,rand3,rand4;
+int focusnum = 0;
 int USB,KEYBOARD;
 
 void on_Mainwindow_destroy()
@@ -269,7 +270,7 @@ void tick(GtkLabel** labels)
 }
 
 void keyboardtick(GtkLabel** labels)
-{
+{ 
   keyboardopen = true;//comment this
   if (keyboardopen)
     {
@@ -282,33 +283,68 @@ void keyboardtick(GtkLabel** labels)
       //SerialRead(KEYBOARD,&input);
       input[2] = (char)1;
       
-      printf("%s \n",input);
       if (input[0] == '$' && input[1] == 'K'&& input[4] == '!')
 	{
 	  int command = (int)input[2];
 	  int pagenum = gtk_notebook_get_current_page(GTK_NOTEBOOK(labels[34]));
+	  gdouble value = 0;
 	  GtkAdjustment * adjust;
-	  printf("Pagenum: %d \n",pagenum);
+	  GtkWidget * temp;
+
 	  switch (command)
 	    {
 	    case 1: //Up Arrow
-	      //gtk_scrolled_window_get_vadjustment ()
-	      printf ("Up Arrow pressed \n");
 	      switch (pagenum)
 		{
 		case 0:
 		  adjust = gtk_scrolled_window_get_vadjustment(labels[31]);
-		  gtk_adjustment_set_value(adjust,gtk_adjustment_get_value(adjust) - 10);
-		  printf("Adjust: %f\n",gtk_adjustment_get_upper(adjust));
+		  value = gtk_adjustment_get_value(adjust);
+		  gtk_adjustment_set_value(adjust,(value>10) ? value - 10:0);
+		  printf(".");		 
+		  break;
+		case 1:
+		  temp = labels[35+ 2*focusnum];
+		  gtk_widget_grab_focus (temp);
+		  printf(".");
+		  if (--focusnum <0)
+		    focusnum = 5;
+		  break;
+		case 3:
+		  adjust = gtk_scrolled_window_get_vadjustment(labels[33]);
+		  value = gtk_adjustment_get_value(adjust);
+		  gtk_adjustment_set_value(adjust,(value>10)?value-10:0);
+		  printf(".");
 		  break;
 		}
 	      break;
 	    case 2: //Down Arrow
-	      printf ("Down arrow pressed \n");
+	      switch (pagenum)
+		{
+		case 0:
+		  adjust = gtk_scrolled_window_get_vadjustment(labels[31]);
+		  value = gtk_adjustment_get_value(adjust);
+		  gtk_adjustment_set_value(adjust,(value<250) ? value + 10:260);
+		  printf(".");		 
+		  break;
+		case 1:
+		  temp = labels[35+ 2*focusnum];
+		  gtk_widget_grab_focus (temp);
+		  printf(".");
+		  if (++focusnum > 5)
+		    focusnum = 0;
+		  break;
+		}	    
 	      break;
 	    case 3: //Tab Button
+	      if (pagenum == 3)
+	      {
+		gtk_notebook_set_current_page(GTK_NOTEBOOK(labels[34]),0);
+		printf(".");
+	      }
+	      else
+		gtk_notebook_next_page(GTK_NOTEBOOK(labels[34]));
 	      break;
-	    case 4:
+	    case 4: //Enter Button
 	      break;
 	    }
 	}

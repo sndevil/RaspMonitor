@@ -12,7 +12,7 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
   GtkTextIter textiter;
 
     builder = gtk_builder_new();
-    labels = malloc(35 * sizeof(GtkLabel*));
+    labels = malloc(47 * sizeof(GtkLabel*));
     gtk_builder_add_from_file (builder, "visual/Satmonitor.glade", NULL);
     window = GTK_WIDGET(gtk_builder_get_object(builder, "Mainwindow"));
     labels[0] = GTK_LABEL(gtk_builder_get_object(builder, "inputpowerval"));
@@ -60,6 +60,20 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     
     *notebook = GTK_NOTEBOOK(gtk_builder_get_object(builder,"notebook"));
     labels[34] = GTK_WIDGET(*notebook);
+
+    labels[35] = GTK_WIDGET(gtk_builder_get_object(builder, "OnoffText"));
+    labels[36] = GTK_WIDGET(gtk_builder_get_object(builder, "Onoffsetbtn"));
+    labels[37] = GTK_WIDGET(gtk_builder_get_object(builder, "SendPowerText"));
+    labels[38] = GTK_WIDGET(gtk_builder_get_object(builder, "Sendpowersetbtn"));
+    labels[39] = GTK_WIDGET(gtk_builder_get_object(builder, "SendRateText"));
+    labels[40] = GTK_WIDGET(gtk_builder_get_object(builder, "Sendratesetbtn"));
+    labels[41] = GTK_WIDGET(gtk_builder_get_object(builder, "ReceiveRateText"));
+    labels[42] = GTK_WIDGET(gtk_builder_get_object(builder, "Receiveratesetbtn"));
+    labels[43] = GTK_WIDGET(gtk_builder_get_object(builder, "SendFreqText"));
+    labels[44] = GTK_WIDGET(gtk_builder_get_object(builder, "Sendfreqsetbtn"));
+    labels[45] = GTK_WIDGET(gtk_builder_get_object(builder, "ReceiveFreqText"));
+    labels[46] = GTK_WIDGET(gtk_builder_get_object(builder, "Receivefreqsetbtn"));
+    
     gtk_notebook_insert_page (*notebook,
 			      labels[29],
 			      gtk_label_new("Log"), 2);
