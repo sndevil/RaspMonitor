@@ -277,7 +277,7 @@ void tick(GtkLabel** labels)
 
 void keyboardtick(GtkLabel** labels)
 { 
-  keyboardopen = true;//comment this
+  //keyboardopen = true;//comment this
   if (keyboardopen)
     {
       //   $K[CODE]E!
@@ -285,29 +285,13 @@ void keyboardtick(GtkLabel** labels)
       //   [CODE] default = 0xFF
       int bytestoread = -1;
       char input[5] = "$K1E!";
-      //memset(input,'\r',sizeof input);
-      //ioctl(KEYBOARD, FIONREAD, &bytestoread);
+      memset(input,'\r',sizeof input);
+      ioctl(KEYBOARD, FIONREAD, &bytestoread);
       //printf("%d bytes available\n",bytestoread);
-      //SerialRead(KEYBOARD,&input);
-      //printf("data read: %s\n",input);
-      if (idx == -2)
-	{
-	  input[2] = (char)4;
-	  idx++;
-	}
-      else if (idx == -1)
-	{
-	  input[2] = (char)2;
-	  idx++;
-	}
-      else
-	{
-	input[2] = '0' + idx++;
-	if (idx == 5)
-	  input[2] = '.';
-	}
-      if (idx > 9)
-	idx = -2;
+      if (bytestoread >= 5)
+	SerialRead(KEYBOARD,&input,5);
+      //printf("Read Packet: %s\n",input);
+      printf(".");
       
       if (input[0] == '$' && input[1] == 'K' && input[4] == '!')
 	{
@@ -330,7 +314,7 @@ void keyboardtick(GtkLabel** labels)
 		  break;
 		case 1:
 		  typing = false;
-		  dotpressed = true;
+		  dotpressed = false;
 		  afterdot = 0;
 		  temp = labels[35 + 2*focusnum];
 		  changeentry(temp,set[focusnum]);
@@ -373,14 +357,18 @@ void keyboardtick(GtkLabel** labels)
 	      break;
 	    case 3: //Tab Button
 	      if (pagenum == 3)
-	      {
 		gtk_notebook_set_current_page(GTK_NOTEBOOK(labels[34]),0);
-		printf(".");
-	      }
 	      else
+	      {
 		gtk_notebook_next_page(GTK_NOTEBOOK(labels[34]));
+		if (pagenum == 0)
+		  gtk_widget_grab_focus(labels[35+2*focusnum]);
+	      }
+	      printf(".");
 	      break;
 	    case 4: //Enter Button
+	      if (pagenum == 1)
+		{
 	      gettyped(&typed);
 	      switch (focusnum)
 		{
@@ -398,7 +386,13 @@ void keyboardtick(GtkLabel** labels)
 		      set[0] = 0;
 		    }
 		  else
-		    printf ("Not a valid input\n");
+		    {
+		      printf ("Not a valid input\n");
+		      changeentry(labels[35+2*focusnum],set[0]);
+		      typing = false;
+		      dotpressed = false;
+		      afterdot = 0;
+		    }
 		  break;
 		case 1:
 		  if (typed <= 43 && typed >= 30)
@@ -408,7 +402,13 @@ void keyboardtick(GtkLabel** labels)
 		      set[1] = typed;
 		    }
 		  else
-		    printf ("Not a valid input\n");
+		    {
+		      printf("Not a valid input\n");
+		      changeentry(labels[35+2*focusnum],set[1]);
+		      typing = false;
+		      dotpressed = false;
+		      afterdot = 0;
+		    }
 		  break;
 		case 2:
 		  if (typed >= 1 && typed <= 2048)
@@ -418,7 +418,13 @@ void keyboardtick(GtkLabel** labels)
 		      set[2] = typed;
 		    }
 		  else
-		    printf("Not a valid input\n");
+		    {
+		      printf("Not a valid input\n");
+		      changeentry(labels[35+2*focusnum],set[2]);
+		      typing = false;
+		      dotpressed = false;
+		      afterdot = 0;
+		    }			    
 		  break;
 		case 3:
 		  if (typed >= 1 && typed <= 2048)
@@ -428,7 +434,13 @@ void keyboardtick(GtkLabel** labels)
 		      set[3] = typed;
 		    }
 		  else
-		    printf("Not a valid input\n");
+		    {
+		      printf("Not a valid input\n");
+		      changeentry(labels[35+2*focusnum],set[3]);
+		      typing = false;
+		      dotpressed = false;
+		      afterdot = 0;
+		    }		    
 		  break;
 		case 4:
 		  if (typed >= 0.1 && typed <= 3)
@@ -438,7 +450,13 @@ void keyboardtick(GtkLabel** labels)
 		      set[4] = typed;
 		    }
 		  else
-		    printf("Not a valid input\n");
+		    {
+		      printf("Not a valid input\n");
+		      changeentry(labels[35+2*focusnum],set[4]);
+		      typing = false;
+		      dotpressed = false;
+		      afterdot = 0;
+		    }
 		  break;
 		case 5:
 		  if (typed >= 0.1 && typed <= 3)
@@ -448,53 +466,104 @@ void keyboardtick(GtkLabel** labels)
 		      set[5] = typed;
 		    }
 		  else
-		    printf("Not a valid input\n");
+		    {
+		      printf("Not a valid input\n");
+		      changeentry(labels[35+2*focusnum],set[5]);
+		      typing = false;
+		      dotpressed = false;
+		      afterdot = 0;				  
+		    }
 		  break;
+		}
 		}
 	      break;
 	    case ((int)'1'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);
-	      numberentered(temp,1);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);
+		  numberentered(temp,1);
+		}
+	      printf(".");
 	      break;
 	    case ((int)'2'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);
-	      numberentered(temp,2);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);
+		  numberentered(temp,2);
+		}
+	      printf(".");
 	      break;
 	    case ((int)'3'):
-      	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);
-	      numberentered(temp,3);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);
+		  numberentered(temp,3);
+		}
+	      printf(".");	      
 	      break;
 	    case ((int)'4'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
-	      numberentered(temp,4);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
+		  numberentered(temp,4);
+		}
+	      printf(".");	      
 	      break;
 	    case ((int)'5'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
-	      numberentered(temp,5);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
+		  numberentered(temp,5);
+		}
+	      printf(".");	      
 	      break;
 	    case ((int)'6'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
-	      numberentered(temp,6);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
+		  numberentered(temp,6);
+		}
+	      printf(".");	      
 	      break;
 	    case ((int)'7'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
-	      numberentered(temp,7);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
+		  numberentered(temp,7);
+		}
+	      printf(".");	      
 	      break;
 	    case ((int)'8'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
-	      numberentered(temp,8);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);	      
+		  numberentered(temp,8);
+		}
+	      printf(".");	      
 	      break;
 	    case ((int)'9'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);
-	      numberentered(temp,9);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);
+		  numberentered(temp,9);
+		}
+	      printf(".");	      
 	      break;
 	    case ((int)'0'):
-	      temp = GTK_ENTRY(labels[35 + 2*focusnum]);
-	      numberentered(temp,0);
+	      if (pagenum == 1)
+		{
+		  temp = GTK_ENTRY(labels[35 + 2*focusnum]);
+		  numberentered(temp,0);
+		}
+	      printf(".");	      
 	      break;
 	    case ((int)'.'):
-	      dotpressed = true;
-	      afterdot = 0;
+	      if (pagenum == 1)
+		{
+		  dotpressed = true;
+		  afterdot = 0;
+		}
+	      printf(".");	      
 	      break;
 	    }
 	}
@@ -502,14 +571,8 @@ void keyboardtick(GtkLabel** labels)
     }
   else
     {
-      char* output = "Hello";
       KEYBOARD = SerialOpen(KeyboardPath ,(speed_t)B115200);
       printf("Keyboard Opened : %d\n",KEYBOARD);
-      // while(1)
-      //{
-      //  SerialWrite(KEYBOARD,&output);
-      //  printf("Sent data %s\n",output);
-      //}
       if (KEYBOARD >= 0)
 	keyboardopen = true;
       else	
@@ -520,27 +583,25 @@ void keyboardtick(GtkLabel** labels)
 void numberentered(GtkEntry * entry, int input)
 {
   double output = 0;
-  	      if (typing)
-		  typenum = typenum* 10 + input;
-	      else
-	      {
-		  typenum = input;
-		  typing = true;
-              }
-	      if (dotpressed)
-		afterdot++;
-	      gettyped(&output);
-	      changeentry(entry,output);
+  if (typing)
+  typenum = typenum* 10 + input;
+  else
+   {
+     typenum = input;
+     typing = true;
+   }
+  if (dotpressed)
+     afterdot++;
+  gettyped(&output);
+  changeentry(entry,output);
 }
 
 void gettyped(double* out)
 {
-  //double output;
   int i;
   (*out) = typenum;
   for (i = 0 ; i < afterdot; i++)
     (*out) /= 10;
-  //return output;
 }
 
 void changeentry(GtkEntry *entry, double num)

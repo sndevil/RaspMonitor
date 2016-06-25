@@ -12,7 +12,7 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
   GtkTextIter textiter;
 
     builder = gtk_builder_new();
-    labels = malloc(47 * sizeof(GtkLabel*));
+    labels = malloc(53 * sizeof(GtkLabel*));
     gtk_builder_add_from_file (builder, "visual/Satmonitor.glade", NULL);
     window = GTK_WIDGET(gtk_builder_get_object(builder, "Mainwindow"));
     labels[0] = GTK_LABEL(gtk_builder_get_object(builder, "inputpowerval"));
@@ -73,6 +73,13 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     labels[44] = GTK_WIDGET(gtk_builder_get_object(builder, "Sendfreqsetbtn"));
     labels[45] = GTK_WIDGET(gtk_builder_get_object(builder, "ReceiveFreqText"));
     labels[46] = GTK_WIDGET(gtk_builder_get_object(builder, "Receivefreqsetbtn"));
+
+    labels[47] = GTK_BUTTON(gtk_builder_get_object(builder, "openportbtn"));
+    labels[48] = GTK_BUTTON(gtk_builder_get_object(builder, "sendbtn"));
+    labels[49] = GTK_BUTTON(gtk_builder_get_object(builder, "Demotoggle"));
+    labels[50] = GTK_BUTTON(gtk_builder_get_object(builder, "savebtn"));
+    labels[51] = GTK_BUTTON(gtk_builder_get_object(builder, "loadbtn"));
+    labels[52] = GTK_BUTTON(gtk_builder_get_object(builder, "quitbtn"));    
     
     gtk_notebook_insert_page (*notebook,
 			      labels[29],

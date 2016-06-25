@@ -65,7 +65,7 @@ void SerialWrite(char* towrite, int Device)
   } while (spot < 7 && n_written > 0);
 }
 
-void SerialRead(int Device,char* buffer)
+void SerialRead(int Device,char* buffer,int len)
 {
   int n = 0,
     spot = 0, pps = 0;
@@ -79,8 +79,7 @@ void SerialRead(int Device,char* buffer)
       pps++;
     sprintf( &buffer[spot], "%c", buf );
     spot += n;
-  } while( spot< INPUT_BUFFER_SIZE && n > 0 && starttime == time(NULL));
-  printf("read to %d, PacketsPerSecond: %d\n",spot,pps);
+  } while( spot< len && n > 0 && starttime == time(NULL));
 
   if (n < 0) {
     printf("Error reading: %s\n",strerror(errno));
