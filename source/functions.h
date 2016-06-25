@@ -15,6 +15,7 @@ void tick(GtkLabel** labels);
 void keyboardtick(GtkLabel** labels);
 void str(char* out,int i);
 void strdbl(char* out,double i);
+void changeentry(GtkEntry *entry, double num);
 void changeLabel(GtkLabel *label, int num);
 void changeLabeldbl(GtkLabel *label, double num);
 void changeStatusLabel(GtkLabel *label, enum lockstat status);

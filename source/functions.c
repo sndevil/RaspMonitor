@@ -2,6 +2,7 @@
 #include <math.h>
 #include <time.h>
 #include <termios.h>
+#include <sys/ioctl.h>
 
 #define PROCESS_MEDIUM_THRESHOLD 20
 #define CONTROL_MEDIUM_THRESHOLD 20
@@ -15,8 +16,8 @@
 
 #define SERIAL_BUFFER_SIZE 8192
 
-const char* KeyboardPath = "/dev/ttyUSB1";
-const char* Serial1Path = "/dev/ttyUSB0";
+const char* KeyboardPath = "/dev/ttyUSB0";
+const char* Serial1Path = "/dev/ttyUSB1";
 
 typedef enum { false, true } bool;
 bool powertoggle = false;
@@ -24,6 +25,8 @@ bool datareceived = false;
 
 bool portopen = false;
 bool keyboardopen = false;
+bool typing = false;
+double typenum = 0;
 
 enum lockstat { locked, searching, found};
 
@@ -277,20 +280,23 @@ void keyboardtick(GtkLabel** labels)
       //   $K[CODE]E!
       //   [CODE] is 1 byte
       //   [CODE] default = 0xFF
-      
-      char input[5] = "$K1E!\r";
+      int bytestoread = -1;
+      char input[5] = "$K1E!";
       //memset(input,'\r',sizeof input);
+      //ioctl(KEYBOARD, FIONREAD, &bytestoread);
+      //printf("%d bytes available\n",bytestoread);
       //SerialRead(KEYBOARD,&input);
-      input[2] = (char)1;
+      //printf("data read: %s\n",input);
+      input[2] = '1';
       
-      if (input[0] == '$' && input[1] == 'K'&& input[4] == '!')
+      if (input[0] == '$' && input[1] == 'K' && input[4] == '!')
 	{
 	  int command = (int)input[2];
 	  int pagenum = gtk_notebook_get_current_page(GTK_NOTEBOOK(labels[34]));
 	  gdouble value = 0;
 	  GtkAdjustment * adjust;
 	  GtkWidget * temp;
-
+	  printf("got a valid packet\n");
 	  switch (command)
 	    {
 	    case 1: //Up Arrow
@@ -346,20 +352,63 @@ void keyboardtick(GtkLabel** labels)
 	      break;
 	    case 4: //Enter Button
 	      break;
+	    case ((int)'1'):
+	      if (typing)
+		  typenum = typenum* 10 + 1;
+	      else
+	      {
+		  tempnum = 1;
+		  typing = true;
+              }
+	      printf("typenum: %f\n",typenum);
+	      temp = labels[35 + 2*focusnum];
+	      changeentry(temp,typenum);
+	      //	        printf("1 key\n");
+	      break;
+	    case ((int)'2'):
+	      break;
 	    }
 	}
       
     }
   else
     {
+      char* output = "Hello";
       KEYBOARD = SerialOpen(KeyboardPath ,(speed_t)B115200);
+      printf("Keyboard Opened : %d\n",KEYBOARD);
+      // while(1)
+      //{
+      //  SerialWrite(KEYBOARD,&output);
+      //  printf("Sent data %s\n",output);
+      //}
       if (KEYBOARD >= 0)
 	keyboardopen = true;
-      else
-	{
-	  printf("Error opening keyboard\n");
-	}
+      else	
+	printf("Error opening keyboard\n");
     }
+}
+
+void numberentered(GtkEntry *entry, int input)
+{
+  	      if (typing)
+		  typenum = typenum* 10 + input;
+	      else
+	      {
+		  tempnum = input;
+		  typing = true;
+              }
+	      printf("typenum: %f\n",typenum);
+	      temp = labels[35 + 2*focusnum];
+	      changeentry(temp,typenum);
+}
+
+void changeentry(GtkEntry *entry, double num)
+{
+  char stri[10];
+  strdbl(stri,num);
+  printf("Made stri: %s \n",stri);
+  gtk_entry_set_text(entry,stri);
+  printf("Changed entry text\n");
 }
 
 void changeLabel(GtkLabel *label, int num)
