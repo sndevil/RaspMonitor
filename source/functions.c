@@ -38,6 +38,9 @@ enum lockstat externalsourcestat = searching;
 double processtemp=0,controltemp=0, racktemp=0, patemp=0;
 double rand1,rand2,rand3,rand4;
 int focusnum = 0,idx = 0;
+int btnfocusnum = 0;
+int alarmfocusnum = 0;
+
 int afterdot = 0;
 bool dotpressed = false;
 double set[6] = {1,35,1024,1024,2,1.5};
@@ -191,6 +194,11 @@ void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
  gtk_widget_destroy (dialog);
 }
 
+void on_Loadbtn_clicked(GtkButton *button, gpointer user_data)
+{
+  
+}
+
 void str(char* out, int i)
 {
   snprintf(out,10,"%d",i);
@@ -287,10 +295,8 @@ void keyboardtick(GtkLabel** labels)
       char input[5] = "$K1E!";
       memset(input,'\r',sizeof input);
       ioctl(KEYBOARD, FIONREAD, &bytestoread);
-      //printf("%d bytes available\n",bytestoread);
       if (bytestoread >= 5)
 	SerialRead(KEYBOARD,&input,5);
-      //printf("Read Packet: %s\n",input);
       printf(".");
       
       if (input[0] == '$' && input[1] == 'K' && input[4] == '!')
@@ -322,12 +328,21 @@ void keyboardtick(GtkLabel** labels)
 		    focusnum = 5;
 		  temp = labels[35 + 2*focusnum];
 		  gtk_widget_grab_focus(temp);
+		  //gtk_widget_grab_focus(labels[53]);
 		  printf(".");
 		  break;
+		case 2:
+		  //if (--alarmfocusnum < 0)
+		  //  alarmfocusnum = 1;
+		  //printf("%d\n",54+alarmfocusnum);
+		  //temp = labels[54];//+alarmfocusnum];
+		  //printf("copied\n");
+		  //gtk_test_widget_send_key(temp,GDK_KEY_Return,0);
+		  printf(".");
 		case 3:
-		  adjust = gtk_scrolled_window_get_vadjustment(labels[33]);
-		  value = gtk_adjustment_get_value(adjust);
-		  gtk_adjustment_set_value(adjust,(value>10)?value-10:0);
+		  if (--btnfocusnum < 0)
+		    btnfocusnum = 5;
+		  gtk_test_widget_send_key(labels[47+btnfocusnum],GDK_KEY_Return,0);
 		  printf(".");
 		  break;
 		}
@@ -353,6 +368,19 @@ void keyboardtick(GtkLabel** labels)
 		  gtk_widget_grab_focus(temp);
 		  printf(".");
 		  break;
+		case 2:
+		  //if (++alarmfocusnum > 1)
+		  //  alarmfocusnum = 0;
+		  //printf("%d\n",54+alarmfocusnum);		  
+		  //temp = labels[54];// + alarmfocusnum];
+		  //printf("copied\n");
+		  //gtk_test_widget_send_key(temp,GDK_KEY_Return,0);
+		  printf(".");
+		case 3:
+		  if (++btnfocusnum > 5)
+		    btnfocusnum = 0;
+		  gtk_test_widget_send_key(labels[47+btnfocusnum],GDK_KEY_Return,0);
+		  break;
 		}	    
 	      break;
 	    case 3: //Tab Button
@@ -362,8 +390,23 @@ void keyboardtick(GtkLabel** labels)
 	      {
 		gtk_notebook_next_page(GTK_NOTEBOOK(labels[34]));
 		if (pagenum == 0)
-		  gtk_widget_grab_focus(labels[35+2*focusnum]);
-	      }
+		  {
+		    changeentry(labels[35],set[0]);
+		    changeentry(labels[37],set[1]);
+		    changeentry(labels[39],set[2]);
+		    changeentry(labels[41],set[3]);
+		    changeentry(labels[43],set[4]);
+		    changeentry(labels[45],set[5]);
+		    gtk_widget_grab_focus(labels[35+2*focusnum]);
+		  }
+		else if (pagenum ==1)
+		  gtk_test_widget_send_key(labels[54],GDK_KEY_Tab,0);
+		else if (pagenum ==2)
+		  {
+		    btnfocusnum = 0;
+		    gtk_test_widget_send_key(labels[47],GDK_KEY_Tab,0);
+		  }
+     	      }
 	      printf(".");
 	      break;
 	    case 4: //Enter Button
@@ -476,6 +519,31 @@ void keyboardtick(GtkLabel** labels)
 		  break;
 		}
 		}
+	      else if (pagenum == 3)
+		{
+		  switch (btnfocusnum)
+		    {
+		    case 0:
+		      on_openportbtn_clicked(labels[47],(gpointer)0);
+		      printf(".");
+		      break;
+		    case 1:
+		      on_sendbtn_clicked(labels[48],(gpointer)0);
+		      break;
+		    case 2:
+		      on_demotoggle_toggled();
+		      break;
+		    case 3:
+		      on_Savebtn_clicked(labels[50],(gpointer)0);
+		      break;
+		    case 4:
+		      on_Loadbtn_clicked(labels[51],(gpointer)0);
+		      break;
+		    case 5:
+		      on_quit_clicked(labels[52],(gpointer)0);
+		      break;
+		    }
+		}
 	      break;
 	    case ((int)'1'):
 	      if (pagenum == 1)
@@ -567,7 +635,7 @@ void keyboardtick(GtkLabel** labels)
 	      break;
 	    }
 	}
-      
+
     }
   else
     {

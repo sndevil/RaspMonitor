@@ -12,9 +12,10 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
   GtkTextIter textiter;
 
     builder = gtk_builder_new();
-    labels = malloc(53 * sizeof(GtkLabel*));
+    labels = malloc(61 * sizeof(GtkLabel*));
     gtk_builder_add_from_file (builder, "visual/Satmonitor.glade", NULL);
     window = GTK_WIDGET(gtk_builder_get_object(builder, "Mainwindow"));
+    labels[60] = window;
     labels[0] = GTK_LABEL(gtk_builder_get_object(builder, "inputpowerval"));
     labels[1] = GTK_LABEL(gtk_builder_get_object(builder, "duplerfreqval"));
     labels[2] = GTK_LABEL(gtk_builder_get_object(builder, "carrierlockval"));
@@ -80,7 +81,10 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     labels[50] = GTK_BUTTON(gtk_builder_get_object(builder, "savebtn"));
     labels[51] = GTK_BUTTON(gtk_builder_get_object(builder, "loadbtn"));
     labels[52] = GTK_BUTTON(gtk_builder_get_object(builder, "quitbtn"));    
-    
+    labels[53] = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindow3"));
+    labels[54] = GTK_WIDGET(gtk_builder_get_object(builder, "SaveAlarmbtn"));
+    labels[55] = GTK_WIDGET(gtk_builder_get_object(builder, "ClearAlarmbtn"));
+
     gtk_notebook_insert_page (*notebook,
 			      labels[29],
 			      gtk_label_new("Log"), 2);
