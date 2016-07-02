@@ -1,0 +1,13 @@
+06:06:13 : Control Temperature High
+06:06:13 : Control Temperature ALERT
+06:06:10 : PA Temperature High
+06:06:10 : Control Temperature High
+06:06:10 : Control Temperature ALERT
+06:06:09 : PA Temperature High
+06:06:09 : Process Temperature High
+06:06:09 : Process Temperature ALERT
+06:06:08 : PA Temperature High
+06:06:08 : Rack Temperature High
+06:06:08 : Control Temperature High
+06:06:08 : PA Temperature ALERT
+06:06:08 : Control Temperature ALERT

@@ -19,6 +19,8 @@
 const char* KeyboardPath = "/dev/ttyUSB0";
 const char* Serial1Path = "/dev/ttyUSB1";
 
+const char* AlertsPath = "alerts/";
+
 typedef enum { false, true } bool;
 bool powertoggle = false;
 bool datareceived = false;
@@ -151,14 +153,14 @@ void on_sendbtn_clicked(GtkButton *button, gpointer user_data)
 
 void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
 {
-  GtkWidget *dialog;
+  //GtkWidget *dialog;
   GtkTextBuffer *textbuffer;
-  GtkFileChooser *chooser;
-  GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
+  //GtkFileChooser *chooser;
+  //GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
   gint res;
 
   textbuffer = user_data;
-  dialog = gtk_file_chooser_dialog_new ("Save File",
+  /*dialog = gtk_file_chooser_dialog_new ("Save File",
                                       NULL,
                                       action,
                                       "_Cancel",
@@ -175,23 +177,35 @@ void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
 
   res = gtk_dialog_run (GTK_DIALOG (dialog));
   if (res == GTK_RESPONSE_ACCEPT)
-    {
-      char *filename;
+  {*/
+      char filename[17];
+      char filepath[30];
       char *content;
       GtkTextIter start,end;
       FILE *f;
+      time_t second,minute,hour,timet;
+      timet = time(NULL);
+      second = timet%60;
+      minute = (timet/60)%60;
+      hour = (timet/3600)%60;
 
-      filename = gtk_file_chooser_get_filename (chooser);
+      printf("starting parse\n");
+      snprintf(filename,17,"File%02d-%02d-%02d.txt",hour,minute,second);
+      printf("Filename: %s\n",filename);
+      snprintf(filepath,strlen(filename) + strlen(AlertsPath)+1,"%s%s",AlertsPath,filename);
+
+      printf("Filepath: %s\n",filepath);
+      //filename = gtk_file_chooser_get_filename (chooser);
       gtk_text_buffer_get_start_iter(textbuffer,&start);
       gtk_text_buffer_get_end_iter(textbuffer,&end);
       content = gtk_text_buffer_get_text(textbuffer,&start,&end,FALSE);
       
-      f = fopen(filename,"w");
+      f = fopen(filepath,"w");
       fwrite(content,sizeof(char),strlen(content),f);
       fclose(f);
-    }
+      //  }
 
- gtk_widget_destroy (dialog);
+      // gtk_widget_destroy (dialog);
 }
 
 void on_Loadbtn_clicked(GtkButton *button, gpointer user_data)
@@ -332,13 +346,12 @@ void keyboardtick(GtkLabel** labels)
 		  printf(".");
 		  break;
 		case 2:
-		  //if (--alarmfocusnum < 0)
-		  //  alarmfocusnum = 1;
-		  //printf("%d\n",54+alarmfocusnum);
-		  //temp = labels[54];//+alarmfocusnum];
-		  //printf("copied\n");
-		  //gtk_test_widget_send_key(temp,GDK_KEY_Return,0);
+		  if (--alarmfocusnum < 0)
+		    alarmfocusnum = 1;
+		  temp = labels[54+alarmfocusnum];
+		  gtk_test_widget_send_key(temp,GDK_KEY_Return,0);
 		  printf(".");
+		  break;
 		case 3:
 		  if (--btnfocusnum < 0)
 		    btnfocusnum = 5;
@@ -369,13 +382,12 @@ void keyboardtick(GtkLabel** labels)
 		  printf(".");
 		  break;
 		case 2:
-		  //if (++alarmfocusnum > 1)
-		  //  alarmfocusnum = 0;
-		  //printf("%d\n",54+alarmfocusnum);		  
-		  //temp = labels[54];// + alarmfocusnum];
-		  //printf("copied\n");
-		  //gtk_test_widget_send_key(temp,GDK_KEY_Return,0);
-		  printf(".");
+		  if (++alarmfocusnum > 1)
+		    alarmfocusnum = 0;
+		  temp = labels[54+alarmfocusnum];
+		  gtk_test_widget_send_key(temp,GDK_KEY_Return,0);
+		  printf(",");
+		  break;
 		case 3:
 		  if (++btnfocusnum > 5)
 		    btnfocusnum = 0;
@@ -518,6 +530,15 @@ void keyboardtick(GtkLabel** labels)
 		    }
 		  break;
 		}
+		}
+	      else if (pagenum == 2)
+		{
+		  if (alarmfocusnum == 0)
+		    on_Savebtn_clicked(labels[54],labels[56]);
+		  else if (alarmfocusnum == 1)
+		    on_Clearbtn_clicked(labels[55],labels[56]);
+
+		  printf(",");
 		}
 	      else if (pagenum == 3)
 		{

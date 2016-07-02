@@ -84,6 +84,7 @@ GtkLabel** initgui(GtkWidget *window, GtkNotebook **notebook)
     labels[53] = GTK_WIDGET(gtk_builder_get_object(builder, "scrolledwindow3"));
     labels[54] = GTK_WIDGET(gtk_builder_get_object(builder, "SaveAlarmbtn"));
     labels[55] = GTK_WIDGET(gtk_builder_get_object(builder, "ClearAlarmbtn"));
+    labels[56] = GTK_WIDGET(gtk_builder_get_object(builder, "logbuffer"));
 
     gtk_notebook_insert_page (*notebook,
 			      labels[29],
