@@ -153,49 +153,28 @@ void on_sendbtn_clicked(GtkButton *button, gpointer user_data)
 
 void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
 {
-  //GtkWidget *dialog;
   GtkTextBuffer *textbuffer;
-  //GtkFileChooser *chooser;
-  //GtkFileChooserAction action = GTK_FILE_CHOOSER_ACTION_SAVE;
-  gint res;
 
   textbuffer = user_data;
-  /*dialog = gtk_file_chooser_dialog_new ("Save File",
-                                      NULL,
-                                      action,
-                                      "_Cancel",
-                                      GTK_RESPONSE_CANCEL,
-                                      "_Save",
-                                      GTK_RESPONSE_ACCEPT,
-                                      NULL);
-  chooser = GTK_FILE_CHOOSER (dialog);
 
-  gtk_file_chooser_set_do_overwrite_confirmation (chooser, TRUE);
-
-  gtk_file_chooser_set_current_name (chooser,
-                                       "Untitled document.txt");
-
-  res = gtk_dialog_run (GTK_DIALOG (dialog));
-  if (res == GTK_RESPONSE_ACCEPT)
-  {*/
-      char filename[17];
-      char filepath[30];
+      char filename[23];
+      char filepath[35];
       char *content;
       GtkTextIter start,end;
       FILE *f;
-      time_t second,minute,hour,timet;
+      time_t second,minute,hour,day,month,timet;
       timet = time(NULL);
       second = timet%60;
       minute = (timet/60)%60;
-      hour = (timet/3600)%60;
+      hour = (timet/3600)%24;
+      day = (timet/86400)%30;
+      month = (timet/2592000)%12;
+      
 
-      printf("starting parse\n");
-      snprintf(filename,17,"File%02d-%02d-%02d.txt",hour,minute,second);
-      printf("Filename: %s\n",filename);
+      snprintf(filename,23,"File%02d-%02d-%02d-%02d-%02d.txt",(int)month,(int)day,(int)hour,(int)minute,(int)second);
       snprintf(filepath,strlen(filename) + strlen(AlertsPath)+1,"%s%s",AlertsPath,filename);
 
-      printf("Filepath: %s\n",filepath);
-      //filename = gtk_file_chooser_get_filename (chooser);
+      printf("Saved Filepath: %s\n",filepath);
       gtk_text_buffer_get_start_iter(textbuffer,&start);
       gtk_text_buffer_get_end_iter(textbuffer,&end);
       content = gtk_text_buffer_get_text(textbuffer,&start,&end,FALSE);
@@ -203,9 +182,6 @@ void on_Savebtn_clicked(GtkButton *button, gpointer user_data)
       f = fopen(filepath,"w");
       fwrite(content,sizeof(char),strlen(content),f);
       fclose(f);
-      //  }
-
-      // gtk_widget_destroy (dialog);
 }
 
 void on_Loadbtn_clicked(GtkButton *button, gpointer user_data)
@@ -258,12 +234,12 @@ void tick(GtkLabel** labels)
       controltemp = rand5;
       racktemp = rand6;
       patemp = rand7;  
-      changeLabeldbl(labels[0],(double)(rand() % 210)/10);
-      changeLabeldbl(labels[1],(rand() % 50000));
-      changeStatusLabel(labels[2],carrierstat++);
-      changeStatusLabel(labels[3],timingstat++);
-      changeLabeldbl(labels[4],(double)(rand()%300)/10);
-      changelabelBER(labels[5],rand3);
+      changeLabeldbl(GTK_LABEL(labels[0]),(double)(rand() % 210)/10);
+      changeLabeldbl(GTK_LABEL(labels[1]),(rand() % 50000));
+      changeStatusLabel(GTK_LABEL(labels[2]),carrierstat++);
+      changeStatusLabel(GTK_LABEL(labels[3]),timingstat++);
+      changeLabeldbl(GTK_LABEL(labels[4]),(double)(rand()%300)/10);
+      changelabelBER(GTK_LABEL(labels[5]),rand3);
       changeLabel(labels[6],(int)(rand()%50));
       changeLabel(labels[7],(int)(processtemp));
       changeLabel(labels[8],(int)(controltemp));
@@ -342,7 +318,6 @@ void keyboardtick(GtkLabel** labels)
 		    focusnum = 5;
 		  temp = labels[35 + 2*focusnum];
 		  gtk_widget_grab_focus(temp);
-		  //gtk_widget_grab_focus(labels[53]);
 		  printf(".");
 		  break;
 		case 2:
@@ -386,7 +361,7 @@ void keyboardtick(GtkLabel** labels)
 		    alarmfocusnum = 0;
 		  temp = labels[54+alarmfocusnum];
 		  gtk_test_widget_send_key(temp,GDK_KEY_Return,0);
-		  printf(",");
+		  printf(".");
 		  break;
 		case 3:
 		  if (++btnfocusnum > 5)
@@ -442,11 +417,11 @@ void keyboardtick(GtkLabel** labels)
 		    }
 		  else
 		    {
-		      printf ("Not a valid input\n");
 		      changeentry(labels[35+2*focusnum],set[0]);
 		      typing = false;
 		      dotpressed = false;
 		      afterdot = 0;
+		      printf ("Not a valid input\n");		      
 		    }
 		  break;
 		case 1:
@@ -458,11 +433,11 @@ void keyboardtick(GtkLabel** labels)
 		    }
 		  else
 		    {
-		      printf("Not a valid input\n");
 		      changeentry(labels[35+2*focusnum],set[1]);
 		      typing = false;
 		      dotpressed = false;
 		      afterdot = 0;
+		      printf("Not a valid input\n");		      
 		    }
 		  break;
 		case 2:
@@ -474,11 +449,11 @@ void keyboardtick(GtkLabel** labels)
 		    }
 		  else
 		    {
-		      printf("Not a valid input\n");
 		      changeentry(labels[35+2*focusnum],set[2]);
 		      typing = false;
 		      dotpressed = false;
 		      afterdot = 0;
+		      printf("Not a valid input\n");		      
 		    }			    
 		  break;
 		case 3:
@@ -490,11 +465,11 @@ void keyboardtick(GtkLabel** labels)
 		    }
 		  else
 		    {
-		      printf("Not a valid input\n");
 		      changeentry(labels[35+2*focusnum],set[3]);
 		      typing = false;
 		      dotpressed = false;
-		      afterdot = 0;
+		      afterdot = 0;	
+		      printf("Not a valid input\n");	      
 		    }		    
 		  break;
 		case 4:
@@ -506,11 +481,11 @@ void keyboardtick(GtkLabel** labels)
 		    }
 		  else
 		    {
-		      printf("Not a valid input\n");
 		      changeentry(labels[35+2*focusnum],set[4]);
 		      typing = false;
 		      dotpressed = false;
 		      afterdot = 0;
+		      printf("Not a valid input\n");		      
 		    }
 		  break;
 		case 5:
@@ -522,11 +497,11 @@ void keyboardtick(GtkLabel** labels)
 		    }
 		  else
 		    {
-		      printf("Not a valid input\n");
 		      changeentry(labels[35+2*focusnum],set[5]);
 		      typing = false;
 		      dotpressed = false;
-		      afterdot = 0;				  
+		      afterdot = 0;
+		      printf("Not a valid input\n");
 		    }
 		  break;
 		}
@@ -538,7 +513,7 @@ void keyboardtick(GtkLabel** labels)
 		  else if (alarmfocusnum == 1)
 		    on_Clearbtn_clicked(labels[55],labels[56]);
 
-		  printf(",");
+		  printf(".");
 		}
 	      else if (pagenum == 3)
 		{
@@ -555,10 +530,10 @@ void keyboardtick(GtkLabel** labels)
 		      on_demotoggle_toggled();
 		      break;
 		    case 3:
-		      on_Savebtn_clicked(labels[50],(gpointer)0);
+		      //on_Savebtn_clicked(labels[50],(gpointer)0);
 		      break;
 		    case 4:
-		      on_Loadbtn_clicked(labels[51],(gpointer)0);
+		      //on_Loadbtn_clicked(labels[51],(gpointer)0);
 		      break;
 		    case 5:
 		      on_quit_clicked(labels[52],(gpointer)0);
@@ -651,8 +626,8 @@ void keyboardtick(GtkLabel** labels)
 		{
 		  dotpressed = true;
 		  afterdot = 0;
+		  printf(".");	      
 		}
-	      printf(".");	      
 	      break;
 	    }
 	}
@@ -733,17 +708,16 @@ void changeStatusLabel(GtkLabel *label, enum lockstat status)
 void changelabelBER(GtkLabel *label, double value)
 {
   int power;
-  double base;
+  //double base;
   char out[13];
   power = floor(log10(value));
-  base = value / (pow(10,power));
+  //base = value / (pow(10,power));
   snprintf(out,13,"%e",value);
   gtk_label_set_text(label,out);
 }
 
 void writelog(GtkTextBuffer *label, const char* str)
 {
-  gchar* out;
   char current[40];
   time_t seconds,minute,hour,timet;
   GtkTextIter textiter;
@@ -752,7 +726,7 @@ void writelog(GtkTextBuffer *label, const char* str)
   seconds = timet%60;
   minute = (timet/60)%60;
   hour = (timet/3600)%24;
-  snprintf(current,strlen(str)+13,"%02d:%02d:%02d : %s\n",hour,minute,seconds,str);
+  snprintf(current,strlen(str)+13,"%02d:%02d:%02d : %s\n",(int)hour,(int)minute,(int)seconds,str);
   gtk_text_buffer_get_start_iter(label,&textiter);
   gtk_text_buffer_insert(label,&textiter,current,strlen(current));
 
@@ -760,7 +734,7 @@ void writelog(GtkTextBuffer *label, const char* str)
 
 void clear_log(GtkTextBuffer *label)
 {
-  gtk_label_set_text(label,"");
+  gtk_label_set_text(GTK_LABEL(label),"");
 }
 
 void checkTemperature(GtkTextBuffer *label)
